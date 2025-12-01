@@ -1,684 +1,960 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <title>Qur'an • Word-by-Word</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="utf-8" />
+  <title>Qur'an • Word-by-Word • বাংলা সহ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    :root {
-      --bg: #050816;
-      --bg-soft: #070b20;
-      --bg-soft-2: #0b1025;
-      --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.08);
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --border-subtle: rgba(148, 163, 184, 0.25);
-      --chip-bg: rgba(15, 23, 42, 0.9);
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.75);
-      --radius-lg: 18px;
-      --radius-xl: 22px;
-      --radius-pill: 999px;
+    :root{
+      --bg:#020617;
+      --panel:#020a1a;
+      --panel-soft:#050f25;
+      --muted:#a8b3c7;
+      --text:#f9fafb;
+      --accent:#22c55e;
+      --gold:#fbbf24;
+      --soft-border:rgba(148,163,184,0.3);
+      --radius:12px;
+      --shadow:0 12px 28px rgba(0,0,0,0.75);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;
+      background:radial-gradient(circle at top,#020c1f 0,#020617 45%,#000 100%);
+      color:var(--text);
+    }
+    button{font-family:inherit;cursor:pointer}
+    a{color:inherit;text-decoration:none}
+
+    .app{max-width:1150px;margin:8px auto 14px;padding:6px}
+
+    /* SINGLE TOP BAR (mobile-friendly) */
+    .topbar{
+      position:sticky;top:0;z-index:120;
+      display:flex;align-items:center;justify-content:space-between;gap:6px;
+      padding:6px 8px;
+      border-radius:12px;
+      background:linear-gradient(90deg,rgba(15,23,42,0.98),rgba(15,23,42,0.92));
+      border:1px solid rgba(148,163,184,0.4);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      transform:translateY(0);
+      transition:transform .25s ease;
+    }
+    .topbar.hidden{transform:translateY(-110%);}
+    .topbar.visible{transform:translateY(0);}
+
+    .top-left{display:flex;align-items:center;gap:8px}
+    .hamburger{
+      font-size:22px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      background:rgba(15,23,42,0.6);
+      color:#e5e7eb;
+    }
+    .app-title{display:flex;flex-direction:column;}
+    .app-main-title{font-weight:700;font-size:14px}
+    .app-sub-title{font-size:11px;color:var(--muted)}
+
+    .top-right{display:flex;align-items:center;gap:6px}
+    .btn{
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      background:rgba(15,23,42,0.8);
+      color:var(--text);
+      font-size:12px;
+    }
+    .btn.primary{
+      background:linear-gradient(90deg,var(--accent),#16a34a);
+      border:none;
+      color:#022c22;
+      font-weight:700;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    .card{
+      margin-top:8px;
+      padding:8px;
+      border-radius:14px;
+      background:radial-gradient(circle at top,rgba(15,23,42,0.9),rgba(15,23,42,0.95));
+      border:1px solid rgba(148,163,184,0.35);
+      box-shadow:var(--shadow);
     }
 
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #0b1120 0, #020617 42%, #020617 100%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    .sura-header{
+      display:flex;justify-content:space-between;align-items:center;gap:6px;
+      margin-bottom:4px;
+    }
+    .sura-title{font-size:16px;font-weight:700;}
+    .sura-sub{font-size:11px;color:var(--muted)}
+
+    .view-chips{display:flex;gap:4px;align-items:center}
+    .chip{
+      padding:3px 7px;font-size:11px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:rgba(15,23,42,0.7);
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .chip.active{
+      background:linear-gradient(90deg,var(--accent),#16a34a);
+      color:#022c22;
+      border:none;
+      font-weight:600;
     }
 
-    /* ---------- Top App Bar ---------- */
+    .aya-list{
+      max-height:calc(100vh - 170px);
+      overflow:auto;
+      padding-right:6px;
+    }
+    .aya-row{
+      display:grid;
+      grid-template-columns:1fr 40px;
+      gap:4px;
+      padding:6px 4px;
+      border-bottom:1px dashed rgba(148,163,184,0.25);
+    }
+    .aya-row:last-child{border-bottom:none;}
 
-    .app-shell {
-      max-width: 960px;
-      margin: 0 auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 10px 10px 80px;
+    @media(min-width:900px){
+      .aya-row{grid-template-columns:26px 1fr 46px;}
+      .aya-check-desktop{display:flex;}
+    }
+    @media(max-width:899px){
+      .aya-check-desktop{display:none;}
     }
 
-    .top-bar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      padding-top: 4px;
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7), transparent);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    .aya-check-desktop{
+      align-items:flex-start;justify-content:center;padding-top:4px;
+    }
+    .aya-check-desktop input{width:16px;height:16px;accent-color:var(--accent);}
+
+    .aya-text{overflow:hidden}
+    .aya-meta{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;
+    }
+    .ayah-num{
+      font-size:10px;
+      padding:3px 6px;border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.4);
+      color:var(--muted);
+    }
+    .tags{font-size:11px;color:var(--gold)}
+
+    .aya-ar{
+      font-family:"Scheherazade New","Amiri",serif;
+      text-align:right;direction:rtl;
+      margin-bottom:4px;
     }
 
-    .top-bar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+    /* word tokens → rounded square */
+    .word-token{
+      display:inline-block;
+      padding:3px 7px;
+      margin:2px 2px;
+      border-radius:8px;
+      cursor:pointer;
+      background:rgba(15,23,42,0.75);
+      border:1px solid rgba(148,163,184,0.45);
+    }
+    .word-token:hover{background:rgba(34,197,94,0.12);}
+
+    .aya-bn-block{
+      margin-top:4px;
+      padding:5px 6px;
+      border-radius:10px;
+      background:rgba(15,23,42,0.85);
+      border:1px solid rgba(148,163,184,0.36);
+    }
+    .aya-bn-label{font-size:10px;color:var(--muted);margin-bottom:2px}
+    .aya-bn-text{font-size:13px;line-height:1.6}
+
+    .aya-actions{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .dots-btn{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:18px;
+      padding:0 4px;
+      border-radius:6px;
+    }
+    .dots-btn:hover{background:rgba(15,23,42,0.7);}
+    .mini-menu{
+      position:absolute;
+      right:4px;top:26px;
+      min-width:160px;
+      background:var(--panel-soft);
+      border-radius:10px;
+      border:1px solid var(--soft-border);
+      padding:4px;
+      box-shadow:var(--shadow);
+      display:none;
+      z-index:140;
+    }
+    .mini-menu.show{display:block}
+    .mini-menu button{
+      display:block;width:100%;text-align:left;
+      padding:5px 7px;
+      font-size:12px;
+      background:transparent;border:none;color:var(--text);
+      border-radius:6px;
+    }
+    .mini-menu button:hover{background:rgba(148,163,184,0.12);}
+
+    /* word popup */
+    .word-popup{
+      position:fixed;
+      z-index:200;
+      min-width:230px;
+      max-width:320px;
+      background:var(--panel-soft);
+      border-radius:12px;
+      border:1px solid var(--soft-border);
+      padding:8px 8px 6px 8px;
+      display:none;
+      box-shadow:var(--shadow);
+    }
+    .word-popup-header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:6px;
+    }
+    .word-popup .arabic{
+      font-family:"Scheherazade New","Amiri",serif;
+      text-align:left;
+    }
+    .word-popup .meaning{
+      margin-top:4px;font-size:13px;
+    }
+    .word-popup .notes{
+      margin-top:4px;font-size:12px;color:var(--muted);
+      max-height:150px;overflow:auto;
+    }
+    .word-popup-close{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:16px;
+      padding:0 2px;
+      cursor:pointer;
     }
 
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* drawer */
+    .drawer{
+      position:fixed;
+      left:-320px;top:0;
+      height:100vh;width:280px;
+      background:var(--panel-soft);
+      box-shadow:8px 0 28px rgba(0,0,0,0.8);
+      border-right:1px solid var(--soft-border);
+      padding:8px;
+      z-index:160;
+      transition:left .25s ease;
+    }
+    .drawer.open{left:4px;}
+    .drawer h3{margin:4px 0 6px;font-size:14px}
+    .drawer .close-x{float:right}
+    .sura-full-list{
+      max-height:calc(100vh - 120px);
+      overflow:auto;padding-right:4px;
+    }
+    .sura-full-item{
+      padding:6px;border-radius:9px;margin-bottom:4px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.4);
+      cursor:pointer;
+    }
+    .sura-full-item:hover{
+      box-shadow:0 8px 20px rgba(0,0,0,0.7);
+      transform:translateY(-1px);
     }
 
-    .brand-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 10px;
-      background: radial-gradient(circle at 30% 20%, #4ade80 0, #22c55e 40%, #16a34a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.55);
-      font-size: 15px;
+    .last-read{
+      margin:6px 2px 4px;
+      padding:5px 7px;
+      border-radius:10px;
+      background:linear-gradient(90deg,rgba(22,163,74,0.2),rgba(56,189,248,0.15));
+      border:1px solid rgba(45,212,191,0.4);
+      display:flex;justify-content:space-between;gap:6px;align-items:center;
+      font-size:12px;
+    }
+    .last-read .actions{display:flex;gap:4px}
+
+    .multi-bar{
+      position:fixed;
+      left:50%;transform:translateX(-50%);
+      bottom:8px;
+      background:radial-gradient(circle at top,rgba(15,23,42,0.96),rgba(15,23,42,0.98));
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      padding:5px 8px;
+      display:none;
+      gap:6px;align-items:center;
+      z-index:200;
+      box-shadow:var(--shadow);
+    }
+    .multi-bar.show{display:flex}
+    #multiCount{font-size:11px;color:var(--muted)}
+
+    .modal-backdrop{
+      position:fixed;inset:0;
+      background:rgba(15,23,42,0.8);
+      display:none;align-items:center;justify-content:center;
+      z-index:220;
+    }
+    .modal-backdrop.show{display:flex}
+    .modal{
+      background:var(--panel-soft);
+      border-radius:12px;
+      border:1px solid var(--soft-border);
+      max-width:900px;width:96%;
+      max-height:90vh;
+      overflow:auto;
+      padding:10px;
+      box-shadow:var(--shadow);
+    }
+    textarea{
+      background:#020617;
+      color:var(--text);
+      border-radius:10px;
+      border:1px solid var(--soft-border);
     }
 
-    .brand-text-main {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .brand-subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .brand-labels {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .chip-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .icon-btn {
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top left,
-          rgba(15, 118, 110, 0.45),
-          rgba(15, 23, 42, 0.97));
-      color: var(--text-main);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.9);
-    }
-
-    .icon-btn span.icon {
-      font-size: 13px;
-    }
-
-    .icon-btn-primary {
-      background: linear-gradient(to right, #22c55e, #4ade80);
-      color: #052e16;
-      border-color: rgba(34, 197, 94, 0.9);
-      font-weight: 600;
-      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.7);
-    }
-
-    .icon-btn-primary span.icon {
-      font-size: 14px;
-    }
-
-    .hamburger {
-      border-radius: 999px;
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #facc15;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
-    }
-
-    .hamburger span {
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    /* ---------- Main layout ---------- */
-
-    .main-layout {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    @media (min-width: 900px) {
-      .main-layout {
-        flex-direction: row;
-        align-items: flex-start;
-      }
-    }
-
-    .left-column {
-      flex: 0 0 280px;
-      max-width: 320px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .right-column {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    @media (max-width: 899px) {
-      .left-column {
-        order: 2;
-      }
-      .right-column {
-        order: 1;
-      }
-    }
-
-    /* ---------- Cards ---------- */
-
-    .card {
-      background: radial-gradient(circle at top left,
-          rgba(15, 23, 42, 0.97),
-          rgba(15, 23, 42, 0.9));
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-soft);
-      padding: 12px 14px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .card-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .card-title-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: #4ade80;
-    }
-
-    .card-subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .pill {
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--text-muted);
-    }
-
-    .pill-strong {
-      border-color: rgba(34, 197, 94, 0.7);
-      color: #bbf7d0;
-      background: rgba(22, 163, 74, 0.1);
-    }
-
-    .card-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .card-row-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .label-muted {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .label-strong {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .tag-soft {
-      font-size: 10px;
-      color: var(--text-muted);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.5);
-    }
-
-    .btn-pill {
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 12px;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-pill-primary {
-      background: linear-gradient(to right, #22c55e, #4ade80);
-      color: #052e16;
-      font-weight: 600;
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.7);
-    }
-
-    .btn-pill-ghost {
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text-muted);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
-
-    /* ---------- Surah list bottom sheet ---------- */
-
-    .bottom-sheet-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(10px);
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-      z-index: 40;
-    }
-
-    .bottom-sheet-backdrop.visible {
-      display: flex;
-    }
-
-    .bottom-sheet {
-      width: 100%;
-      max-width: 960px;
-      max-height: 82vh;
-      background: radial-gradient(circle at top, #020617, #020617 50%, #020617 100%);
-      border-radius: 20px 20px 0 0;
-      border-top: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 -20px 45px rgba(15, 23, 42, 0.95);
-      padding: 10px 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      overflow: hidden;
-    }
-
-    .sheet-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .sheet-title {
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sheet-title-badge {
-      font-size: 11px;
-      color: var(--text-muted);
-      padding: 1px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
-
-    .sheet-close-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-muted);
-      width: 28px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .sheet-search-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .sheet-search {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      padding: 5px 9px;
-    }
-
-    .sheet-search input {
-      border: none;
-      background: transparent;
-      color: var(--text-main);
-      font-size: 12px;
-      width: 100%;
-      outline: none;
-    }
-
-    .sheet-search-clear {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-muted);
-      font-size: 11px;
-      padding: 2px 7px;
-      cursor: pointer;
-    }
-
-    .sheet-list {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 4px;
-      margin-top: 6px;
-      padding-bottom: 4px;
-    }
-
-    .surah-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 7px 8px;
-      border-radius: 14px;
-      border: 1px solid rgba(30, 64, 175, 0.2);
-      background: radial-gradient(circle at top left,
-          rgba(15, 23, 42, 0.96),
-          rgba(15, 23, 42, 0.92));
-      margin-bottom: 4px;
-      cursor: pointer;
-      transition: border-color 0.15s ease, background 0.15s ease, transform 0.08s ease-out;
-    }
-
-    .surah-item:hover {
-      border-color: rgba(34, 197, 94, 0.65);
-      background: radial-gradient(circle at top left,
-          rgba(22, 163, 74, 0.12),
-          rgba(15, 23, 42, 0.96));
-      transform: translateY(-1px);
-    }
-
-    .surah-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .surah-index {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #e5e7eb;
-      flex-shrink: 0;
-    }
-
-    .surah-texts {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .surah-name-bn {
-      font-size: 12px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .surah-meta {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .surah-ar {
-      font-size: 14px;
-      font-weight: 500;
-      font-family: "Scheherazade New", "Amiri", system-ui;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    /* ---------- Utility ---------- */
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      font-family: inherit;
-    }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <!-- Top Bar -->
-    <header class="top-bar">
-      <div class="top-bar-inner">
-        <div class="brand-title">
-          <div class="brand-icon">ﺍ</div>
-          <div class="brand-labels">
-            <div class="brand-text-main">Qur'an • Word-by-Word</div>
-            <div class="brand-subtitle">আরবি • শব্দ ধরে ধরে • বাংলা ব্যাখ্যা</div>
-          </div>
-        </div>
-
-        <div class="top-actions">
-          <button id="settingsBtn" class="icon-btn">
-            <span class="icon">⚙️</span>
-            <span>সেটিংস</span>
-          </button>
-          <button id="openSurahListBtn" class="icon-btn icon-btn-primary">
-            <span class="icon">📖</span>
-            <span>সূরা তালিকা</span>
-          </button>
-          <button class="hamburger" id="drawerToggleBtn" title="Menu">
-            <span>≡</span>
-          </button>
+  <div class="app">
+    <!-- Top bar -->
+    <div id="topbar" class="topbar visible">
+      <div class="top-left">
+        <button id="hamburger" class="hamburger" title="সূরা তালিকা">≡</button>
+        <div class="app-title">
+          <div class="app-main-title">Qur'an • Word-by-Word</div>
+          <div id="topSuraName" class="app-sub-title">সূরা নির্বাচন করুন</div>
         </div>
       </div>
-    </header>
+      <div class="top-right">
+        <button id="openSettings" class="btn">⚙️ Settings</button>
+        <button id="openMore" class="btn">⋮ More</button>
+      </div>
+    </div>
 
-    <!-- Main Layout -->
-    <main class="main-layout">
-      <!-- Left Column: Last read + stats -->
-      <section class="left-column">
-        <!-- Last read card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-title-icon">⏱</div>
-              <div>শেষ পড়া</div>
-            </div>
-            <span class="pill">অটো সেভ</span>
-          </div>
-          <div class="card-subtitle">
-            সর্বশেষ যে সূরা থেকে পড়েছেন, সেখান থেকেই আবার চালু করুন।
-          </div>
-
-          <div class="card-row">
-            <div class="card-row-main">
-              <div class="label-muted">বর্তমান নির্বাচন</div>
-              <div class="label-strong" id="lastReadLabel">নির্বাচিত নেই</div>
-              <div class="tag-soft" id="lastReadTag">আয়াত ১ থেকে শুরু হবে</div>
-            </div>
-            <button id="continueBtn" class="btn-pill btn-pill-primary">
-              <span>⏱ Continue</span>
-            </button>
-          </div>
-        </article>
-
-        <!-- Basic info / stats card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-title-icon">ℹ️</div>
-              <div>কুরআন তথ্য</div>
-            </div>
-          </div>
-          <div class="card-subtitle">
-            ১১৪টি সূরা • ৩০ পারা • আরবি মূল text-এর সঙ্গে বাংলা অনুবাদ ও শব্দ অনুযায়ী ব্যাখ্যা।
-          </div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-            <span class="pill pill-strong">১১৪ সূরা</span>
-            <span class="pill">মাক্কী + মাদানী</span>
-            <span class="pill">শব্দ ধরে ধরে অর্থ</span>
-          </div>
-        </article>
-      </section>
-
-      <!-- Right Column: Main actions -->
-      <section class="right-column">
-        <!-- Big action card: select surah -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-title-icon">📖</div>
-              <div>সূরা নির্বাচন করুন</div>
-            </div>
-            <span class="sheet-title-badge">১১৪টি সূরা • সম্পূর্ণ কুরআন</span>
-          </div>
-          <div class="card-subtitle">
-            যে সূরা থেকে পড়া শুরু করতে চান, নিচের বাটন থেকে নির্বাচন করুন।
-          </div>
-
-          <div class="card-row" style="margin-top:10px;">
-            <div class="card-row-main">
-              <div class="label-muted">বিস্তারিত সূরা তালিকা</div>
-              <div class="label-strong" id="continueTitle">সূরা তালিকা খুলুন</div>
-              <div class="tag-soft" id="continueSub">
-                নাম, নম্বর বা আরবি নাম দিয়ে খুঁজে নিতে পারবেন
-              </div>
-            </div>
-
-            <button id="openSurahListBtn2" class="btn-pill btn-pill-ghost">
-              <span>📖 সূরা তালিকা</span>
-            </button>
-          </div>
-        </article>
-      </section>
-    </main>
-  </div>
-
-  <!-- Surah List Bottom Sheet -->
-  <div class="bottom-sheet-backdrop" id="surahSheet">
-    <div class="bottom-sheet">
-      <div class="sheet-header">
-        <div class="sheet-title">
-          <span>📖 সূরা তালিকা</span>
-          <span class="sheet-title-badge">১১৪টি সূরা</span>
+    <!-- main card: sura header + ayat list -->
+    <div class="card">
+      <div class="sura-header">
+        <div>
+          <div id="currentSuraTitle" class="sura-title">সূরা নির্বাচন করুন</div>
+          <div id="currentSuraSub" class="sura-sub">সূরা তথ্য এখানে দেখবে</div>
         </div>
-        <button class="sheet-close-btn" id="closeSurahSheetBtn">✕</button>
-      </div>
-
-      <div class="sheet-search-row">
-        <div class="sheet-search">
-          <span style="font-size:13px;">🔍</span>
-          <input
-            id="surahSearchInput"
-            type="text"
-            placeholder="নাম/নং দিয়ে সার্চ করুন..."
-          />
+        <div class="view-chips" id="viewButtons">
+          <div class="chip" data-view="both">আরবি+বাংলা</div>
+          <div class="chip" data-view="ar">শুধু আরবি</div>
+          <div class="chip" data-view="bn">শুধু বাংলা</div>
         </div>
-        <button class="sheet-search-clear" id="surahSearchClearBtn">
-          Clear
-        </button>
       </div>
 
-      <div class="sheet-list" id="surahListContainer">
-        <!-- JS দিয়ে সূরা লিস্ট আসবে -->
-      </div>
+      <div id="lastReadContainer"></div>
+      <div id="ayaList" class="aya-list"></div>
     </div>
   </div>
 
-  <!-- Scripts (⚠️ order: suras.js first, then app.js) -->
+  <!-- Drawer -->
+  <div id="drawer" class="drawer">
+    <button id="drawerClose" class="btn close-x">✕</button>
+    <h3>সূরার তালিকা</h3>
+    <input id="drawerSearch" placeholder="সূরা নাম / নং..." style="width:100%;padding:6px;border-radius:999px;border:1px solid var(--soft-border);margin-bottom:6px;background:rgba(15,23,42,0.8);color:var(--text);font-size:12px"/>
+    <div id="drawerList" class="sura-full-list"></div>
+  </div>
+
+  <!-- Word popup -->
+  <div id="wordPopup" class="word-popup">
+    <div class="word-popup-header">
+      <div>
+        <div id="wpArabic" class="arabic"></div>
+        <div id="wpMeaning" class="meaning"></div>
+      </div>
+      <button id="wpClose" class="word-popup-close" title="Close">✕</button>
+    </div>
+    <div id="wpNotes" class="notes"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div id="modalWindow" class="modal"></div>
+  </div>
+
+  <!-- Multi-bar -->
+  <div id="multiBar" class="multi-bar">
+    <div id="multiCount">0 টি নির্বাচন</div>
+    <button id="multiCopyBtn" class="btn">📋 Copy</button>
+    <button id="multiShareBtn" class="btn primary">🔗 Share</button>
+    <button id="multiClearBtn" class="btn">✖ Clear</button>
+  </div>
+
+  <!-- sura meta -->
   <script src="suras.js"></script>
-  <script src="app.js"></script>
+  <script>
+  (function(){
+    if(!window.suras || !Array.isArray(window.suras)){
+      alert('suras.js লোড হয়নি বা সঠিক নয়।');
+      return;
+    }
+
+    const S = {
+      get(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}},
+      set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+    };
+
+    const STATE = {
+      curSuraIndex:0,
+      curSurahData:null,
+      view:S.get('q_view','both'),
+      showOsmani:S.get('q_showOsmani',true),
+      showTawjih:S.get('q_showTawjih',true),
+      fontArabic:S.get('q_fontArabic',22),
+      fontBanglaMain:S.get('q_fontBanglaMain',13),
+      fontOsmani:S.get('q_fontOsmani',12),
+      fontTawjih:S.get('q_fontTawjih',12),
+      fontGrammar:S.get('q_fontGrammar',12),
+      fontPopupArabic:S.get('q_fontPopupArabic',22),
+      lineHeight:S.get('q_lineHeight',1.7),
+      pins:S.get('q_pins',[]),
+      favs:S.get('q_favs',[]),
+      lastRead:S.get('q_lastRead',null),
+      selected:new Set(),
+      multiMode:false,
+      fullscreen:S.get('q_fullscreen',false)
+    };
+
+    const topbar = document.getElementById('topbar');
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const drawerClose = document.getElementById('drawerClose');
+    const drawerList = document.getElementById('drawerList');
+    const drawerSearch = document.getElementById('drawerSearch');
+    const topSuraName = document.getElementById('topSuraName');
+
+    const currentSuraTitle=document.getElementById('currentSuraTitle');
+    const currentSuraSub=document.getElementById('currentSuraSub');
+    const ayaListEl=document.getElementById('ayaList');
+    const lastReadContainer=document.getElementById('lastReadContainer');
+
+    const wordPopup=document.getElementById('wordPopup');
+    const wpArabic=document.getElementById('wpArabic');
+    const wpMeaning=document.getElementById('wpMeaning');
+    const wpNotes=document.getElementById('wpNotes');
+    const wpClose=document.getElementById('wpClose');
+
+    const modalBackdrop=document.getElementById('modalBackdrop');
+    const modalWindow=document.getElementById('modalWindow');
+
+    const multiBar=document.getElementById('multiBar');
+    const multiCount=document.getElementById('multiCount');
+
+    // drawer
+    hamburger.addEventListener('click',()=>{ drawer.classList.add('open'); });
+    drawerClose.addEventListener('click',()=>{ drawer.classList.remove('open'); });
+    drawerSearch.addEventListener('input',()=>renderDrawerList(drawerSearch.value));
+
+    function renderDrawerList(filter=''){
+      drawerList.innerHTML='';
+      const ft=(filter||'').trim().toLowerCase();
+      window.suras.forEach((s,idx)=>{
+        const bn=s.nameBn||s.name_bn||s.name||'';
+        const ar=s.nameAr||s.name_ar||'';
+        const id=s.number||idx+1;
+        if(ft && !(bn.toLowerCase().includes(ft) || ar.toLowerCase().includes(ft) || String(id)===ft)) return;
+        const div=document.createElement('div');
+        div.className='sura-full-item';
+        div.innerHTML='<div style="font-weight:600;font-size:13px">'+id+'. '+bn+'</div><div style="font-size:11px;color:var(--muted)">'+ar+' • '+(s.ayahCount||(s.ayahs?s.ayahs.length:'?'))+' আয়াত</div>';
+        div.addEventListener('click',()=>{ setCurrentSura(idx); drawer.classList.remove('open'); });
+        drawerList.appendChild(div);
+      });
+    }
+    renderDrawerList();
+
+    function keyOf(s,a){return s+':'+a}
+    function findIndexByKey(arr,key){return arr.findIndex(x=>x.key===key)}
+    function escapeHtml(s){if(!s) return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    function extractTranslationsFromAyah(ayah){
+      const main = ayah.bangla||ayah.bn||ayah.bangla_main||ayah.main_bn||ayah.translation||ayah.text_bn||ayah.meaning||'';
+      let os='',tw='';
+      if(ayah.translations && typeof ayah.translations==='object'){
+        os = ayah.translations.osmani || ayah.translations.osman || ayah.translations.osmn || '';
+        tw = ayah.translations.tawjih || ayah.translations.tawzeeh || ayah.translations.tawjihul || '';
+      }
+      os = os || ayah.bangla_osmani || ayah.bn_osmani || ayah.osmani || ayah.tafseer_osmani || '';
+      tw = tw || ayah.bangla_tawzeeh || ayah.bn_tawzeeh || ayah.tawzeeh || ayah.taozeeh || '';
+      return {main,os,tw};
+    }
+
+    async function setCurrentSura(idx){
+      STATE.curSuraIndex=idx;
+      const meta=window.suras[idx]||{};
+      currentSuraTitle.textContent=(meta.number||idx+1)+'. '+(meta.nameBn||meta.name||'');
+      currentSuraSub.textContent=(meta.nameAr||'')+' • '+(meta.revelationPlace||meta.type||'')+' • '+((meta.ayahCount)||(meta.ayahs?meta.ayahs.length:'?'))+' আয়াত';
+      topSuraName.textContent = meta.nameBn || meta.name || 'সূরা নির্বাচন করুন';
+
+      STATE.curSurahData=null;
+      if(meta.file){
+        try{
+          const res = await fetch(meta.file);
+          if(!res.ok) throw new Error('HTTP error');
+          STATE.curSurahData = await res.json();
+        }catch(e){
+          console.error('surah load failed',e);
+          STATE.curSurahData = meta;
+        }
+      }else STATE.curSurahData = meta;
+
+      STATE.selected.clear();
+      renderAyaList();
+      renderLastRead();
+      renderMultiBar();
+    }
+
+    function renderAyaList(){
+      ayaListEl.innerHTML='';
+      const data=STATE.curSurahData||{};
+      const ayas=Array.isArray(data.ayahs)?data.ayahs:(data.ayas||[]);
+      ayas.forEach((ayah,idx)=>{
+        const row=document.createElement('div');
+        row.className='aya-row';
+        row.id='aya-'+STATE.curSuraIndex+'-'+idx;
+
+        const chkCol=document.createElement('div');
+        chkCol.className='aya-check-desktop';
+        const cb=document.createElement('input');
+        cb.type='checkbox';
+        const k=keyOf(STATE.curSuraIndex,idx);
+        cb.checked=STATE.selected.has(k);
+        cb.addEventListener('change',()=>{
+          if(cb.checked) STATE.selected.add(k); else STATE.selected.delete(k);
+          renderMultiBar();
+        });
+        chkCol.appendChild(cb);
+
+        const textCol=document.createElement('div'); textCol.className='aya-text';
+        const metaRow=document.createElement('div'); metaRow.className='aya-meta';
+        const num=document.createElement('div'); num.className='ayah-num'; num.textContent=(STATE.curSuraIndex+1)+':'+(idx+1);
+        const tags=document.createElement('div'); tags.className='tags';
+        if(findIndexByKey(STATE.pins,k)!==-1) tags.textContent+='📌 ';
+        if(findIndexByKey(STATE.favs,k)!==-1) tags.textContent+='⭐';
+        metaRow.appendChild(num); metaRow.appendChild(tags);
+        textCol.appendChild(metaRow);
+
+        const arDiv=document.createElement('div'); arDiv.className='aya-ar';
+        arDiv.style.fontSize=STATE.fontArabic+'px';
+        arDiv.style.lineHeight=STATE.lineHeight;
+        if(Array.isArray(ayah.words)&&ayah.words.length){
+          ayah.words.forEach(w=>{
+            const span=document.createElement('span');
+            span.className='word-token';
+            span.textContent=w.text||w.word||'';
+            span.dataset.meaning=w.meaningBn||w.meaning||w.meaning_bn||w.meaning_en||'';
+            span.dataset.notes=w.notes||w.note||w.grammar||ayah.grammar||'';
+            span.addEventListener('click',(ev)=>openWordPopup(ev.currentTarget,ayah));
+            arDiv.appendChild(span);
+          });
+        }else{
+          arDiv.textContent=ayah.arabic||ayah.ar||ayah.text_ar||'';
+        }
+        if(STATE.view==='bn') arDiv.style.display='none';
+        textCol.appendChild(arDiv);
+
+        if(STATE.view!=='ar'){
+          const blocks=extractTranslationsFromAyah(ayah);
+          if(blocks.main){
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.style.fontSize=STATE.fontBanglaMain+'px';
+            b.innerHTML='<div class="aya-bn-text">'+escapeHtml(blocks.main)+'</div>';
+            textCol.appendChild(b);
+          }
+          if(blocks.os&&STATE.showOsmani){
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML='<div class="aya-bn-label">তাফসীরে ওসমানী</div><div class="aya-bn-text" style="font-size:'+STATE.fontOsmani+'px">'+escapeHtml(blocks.os)+'</div>';
+            textCol.appendChild(b);
+          }
+          if(blocks.tw&&STATE.showTawjih){
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML='<div class="aya-bn-label">তাওযীহুল কুরআন</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(blocks.tw)+'</div>';
+            textCol.appendChild(b);
+          }
+          const g=ayah.grammar||ayah.grammarNotes||ayah.notes||'';
+          if(g){
+            const b = document.createElement('div');
+            b.className = 'aya-bn-block';
+
+            const label = document.createElement('div');
+            label.className = 'aya-bn-label';
+            label.textContent = 'ব্যাকরণ নোট';
+
+            const txt = document.createElement('div');
+            txt.className = 'aya-bn-text';
+            txt.textContent = g;
+            txt.style.fontSize = STATE.fontGrammar + 'px';
+
+            b.appendChild(label);
+            b.appendChild(txt);
+            textCol.appendChild(b);
+          }
+        }
+
+        textCol.addEventListener('click',(ev)=>{
+          if(ev.target.classList.contains('word-token')) return;
+          if(STATE.multiMode){
+            const key=keyOf(STATE.curSuraIndex,idx);
+            if(STATE.selected.has(key)) STATE.selected.delete(key);
+            else STATE.selected.add(key);
+            renderMultiBar();
+            cb.checked = STATE.selected.has(key);
+          }
+        });
+
+        const actCol=document.createElement('div'); actCol.className='aya-actions';
+        const wrap=document.createElement('div'); wrap.style.position='relative';
+        const dotsBtn=document.createElement('button'); dotsBtn.className='dots-btn'; dotsBtn.innerHTML='⋯';
+        const menu=document.createElement('div'); menu.className='mini-menu';
+        const miPin=document.createElement('button'); miPin.textContent=(findIndexByKey(STATE.pins,k)!==-1?'Unpin 📍':'Pin 📌');
+        const miFav=document.createElement('button'); miFav.textContent=(findIndexByKey(STATE.favs,k)!==-1?'Unfav ☆':'Favourite ⭐');
+        const miCopy=document.createElement('button'); miCopy.textContent='Copy 📋';
+        const miShare=document.createElement('button'); miShare.textContent='Share 🔗';
+        const miLast=document.createElement('button'); miLast.textContent='Set Last Read ⏱';
+
+        [miPin,miFav,miCopy,miShare,miLast].forEach(btn=>menu.appendChild(btn));
+        dotsBtn.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show'));
+          menu.classList.toggle('show');
+        });
+        document.addEventListener('click',()=>{ menu.classList.remove('show'); });
+
+        miPin.addEventListener('click',()=>{
+          togglePin(k,STATE.curSuraIndex,idx); menu.classList.remove('show'); renderAyaList();
+        });
+        miFav.addEventListener('click',()=>{
+          toggleFav(k,STATE.curSuraIndex,idx); menu.classList.remove('show'); renderAyaList();
+        });
+        miCopy.addEventListener('click',()=>{
+          navigator.clipboard.writeText(formatAyaForCopy(STATE.curSuraIndex,idx,'both')).then(()=>alert('Copied'));
+          menu.classList.remove('show');
+        });
+        miShare.addEventListener('click',()=>{
+          doShare(formatAyaForCopy(STATE.curSuraIndex,idx,'both'));
+          menu.classList.remove('show');
+        });
+        miLast.addEventListener('click',()=>{
+          STATE.lastRead={surahIndex:STATE.curSuraIndex,ayaIndex:idx,time:Date.now()};
+          S.set('q_lastRead',STATE.lastRead);
+          renderLastRead();
+          alert('Last read set');
+          menu.classList.remove('show');
+        });
+
+        wrap.appendChild(dotsBtn); wrap.appendChild(menu);
+        actCol.appendChild(wrap);
+
+        row.appendChild(chkCol);
+        row.appendChild(textCol);
+        row.appendChild(actCol);
+        ayaListEl.appendChild(row);
+      });
+    }
+
+    function formatAyaForCopy(sIdx,aIdx,mode){
+      const sura=window.suras[sIdx]||{};
+      const data=(STATE.curSurahData && STATE.curSuraIndex===sIdx)?(STATE.curSurahData.ayahs||STATE.curSurahData.ayas||[]):(sura.ayahs||sura.ayas||[]);
+      const aya=data[aIdx]||{};
+      const ar=aya.arabic||aya.ar||aya.text_ar||'';
+      const blocks=extractTranslationsFromAyah(aya);
+      const bn=blocks.main||'';
+      const head='['+(sura.nameBn||sura.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
+      if(mode==='ar') return ar+'\n'+head;
+      if(mode==='bn') return bn+'\n'+head;
+      return (ar?ar+'\n':'')+(bn?bn+'\n':'')+head;
+    }
+    function formatMultipleSelection(mode){
+      return Array.from(STATE.selected).map(k=>{
+        const [s,a]=k.split(':').map(Number);
+        return formatAyaForCopy(s,a,mode);
+      }).join('\n\n');
+    }
+
+    function doShare(text){
+      if(navigator.share) navigator.share({text}).catch(()=>{navigator.clipboard.writeText(text)});
+      else navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard'));
+    }
+
+    function togglePin(key,sIdx,aIdx){
+      const i=findIndexByKey(STATE.pins,key);
+      if(i>=0) STATE.pins.splice(i,1);
+      else STATE.pins.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
+      S.set('q_pins',STATE.pins);
+    }
+    function toggleFav(key,sIdx,aIdx){
+      const i=findIndexByKey(STATE.favs,key);
+      if(i>=0) STATE.favs.splice(i,1);
+      else STATE.favs.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
+      S.set('q_favs',STATE.favs);
+    }
+
+    function renderLastRead(){
+      lastReadContainer.innerHTML='';
+      if(!STATE.lastRead) return;
+      const lr=STATE.lastRead;
+      const sura=window.suras[lr.surahIndex]||{};
+      const el=document.createElement('div');
+      el.className='last-read';
+      el.innerHTML='<div><strong>শেষ পড়া:</strong> '+(sura.nameBn||sura.name||'')+' '+(lr.surahIndex+1)+':'+(lr.ayaIndex+1)+'</div><div class="actions"><button id="goLast" class="btn primary">⏱ Continue</button><button id="clrLast" class="btn">Reset</button></div>';
+      lastReadContainer.appendChild(el);
+      document.getElementById('goLast').onclick=()=>{
+        setCurrentSura(lr.surahIndex);
+        setTimeout(()=>{
+          const node=document.getElementById('aya-'+lr.surahIndex+'-'+lr.ayaIndex);
+          if(node) node.scrollIntoView({behavior:'smooth',block:'center'});
+        },200);
+      };
+      document.getElementById('clrLast').onclick=()=>{
+        STATE.lastRead=null; S.set('q_lastRead',null); renderLastRead();
+      };
+    }
+
+    function renderMultiBar(){
+      const c=STATE.selected.size;
+      if(c>0){multiCount.textContent=c+' টি নির্বাচন';multiBar.classList.add('show');}
+      else multiBar.classList.remove('show');
+    }
+
+    document.getElementById('multiCopyBtn').onclick=()=>{
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      const txt=formatMultipleSelection('both');
+      openCopyModal(txt);
+    };
+    document.getElementById('multiShareBtn').onclick=()=>{
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      doShare(formatMultipleSelection('both'));
+    };
+    document.getElementById('multiClearBtn').onclick=()=>{
+      STATE.selected.clear(); renderMultiBar(); renderAyaList();
+    };
+
+    function openCopyModal(prefill){
+      modalWindow.innerHTML='<h3>Copy / Share</h3>'+
+        '<div style="margin-top:6px;font-size:12px">'+
+        '<label><input type="radio" name="fmt" value="both" checked> আরবি+বাংলা</label> &nbsp;'+
+        '<label><input type="radio" name="fmt" value="ar"> শুধু আরবি</label> &nbsp;'+
+        '<label><input type="radio" name="fmt" value="bn"> শুধু বাংলা</label>'+
+        '</div>'+
+        '<textarea id="copyPreview" style="width:100%;height:160px;margin-top:6px;padding:6px">'+(prefill||'')+'</textarea>'+
+        '<div style="margin-top:6px;display:flex;justify-content:flex-end;gap:6px">'+
+        '<button id="copyDo" class="btn primary">Copy</button>'+
+        '<button id="shareDo" class="btn">Share</button>'+
+        '<button id="copyClose" class="btn">Close</button>'+
+        '</div>';
+      modalBackdrop.classList.add('show');
+      document.getElementById('copyDo').onclick=()=>{navigator.clipboard.writeText(document.getElementById('copyPreview').value||'').then(()=>alert('Copied'));};
+      document.getElementById('shareDo').onclick=()=>{doShare(document.getElementById('copyPreview').value||'');};
+      document.getElementById('copyClose').onclick=()=>{modalBackdrop.classList.remove('show');};
+    }
+
+    // Settings modal
+    document.getElementById('openSettings').addEventListener('click',()=>{
+      modalWindow.innerHTML=
+        '<h3>Settings</h3>'+
+        '<div style="margin-top:6px;font-size:13px">'+
+          '<label><input type="checkbox" id="cOsmani"> তাফসীরে ওসমানী দেখাও</label><br>'+
+          '<label><input type="checkbox" id="cTawjih"> তাওযীহুল কুরআন দেখাও</label><br>'+
+          '<label><input type="checkbox" id="cFull"> Full screen reading (top bar auto hide)</label>'+
+        '</div>'+
+        '<div style="margin-top:8px;font-size:12px;line-height:1.8">'+
+          '<div>Arabic font size (<span id="nArabic">'+STATE.fontArabic+'</span>)<br><input id="fArabic" type="range" min="18" max="32" value="'+STATE.fontArabic+'"></div>'+
+          '<div style="margin-top:4px;">Default বাংলা অনুবাদ (<span id="nBanglaMain">'+STATE.fontBanglaMain+'</span>)<br><input id="fBanglaMain" type="range" min="11" max="22" value="'+STATE.fontBanglaMain+'"></div>'+
+          '<div style="margin-top:4px;">তাফসীরে ওসমানী (<span id="nOsmani">'+STATE.fontOsmani+'</span>)<br><input id="fOsmani" type="range" min="11" max="22" value="'+STATE.fontOsmani+'"></div>'+
+          '<div style="margin-top:4px;">তাওযীহুল কুরআন (<span id="nTawjih">'+STATE.fontTawjih+'</span>)<br><input id="fTawjih" type="range" min="11" max="22" value="'+STATE.fontTawjih+'"></div>'+
+          '<div style="margin-top:4px;">Grammar notes (<span id="nGrammar">'+STATE.fontGrammar+'</span>)<br><input id="fGrammar" type="range" min="11" max="22" value="'+STATE.fontGrammar+'"></div>'+
+          '<div style="margin-top:4px;">Word popup Arabic (<span id="nPopupAr">'+STATE.fontPopupArabic+'</span>)<br><input id="fPopupAr" type="range" min="18" max="32" value="'+STATE.fontPopupArabic+'"></div>'+
+        '</div>'+
+        '<div style="margin-top:8px;display:flex;justify-content:flex-end;gap:6px">'+
+          '<button id="saveSt" class="btn primary">Save</button>'+
+          '<button id="closeSt" class="btn">Close</button>'+
+        '</div>';
+      modalBackdrop.classList.add('show');
+
+      document.getElementById('cOsmani').checked=STATE.showOsmani;
+      document.getElementById('cTawjih').checked=STATE.showTawjih;
+      document.getElementById('cFull').checked=STATE.fullscreen;
+
+      const bindRange=(idRange,idNum)=>{
+        const r=document.getElementById(idRange);
+        const n=document.getElementById(idNum);
+        r.addEventListener('input',()=>{n.textContent=r.value;});
+      };
+      bindRange('fArabic','nArabic');
+      bindRange('fBanglaMain','nBanglaMain');
+      bindRange('fOsmani','nOsmani');
+      bindRange('fTawjih','nTawjih');
+      bindRange('fGrammar','nGrammar');
+      bindRange('fPopupAr','nPopupAr');
+
+      document.getElementById('closeSt').onclick=()=>modalBackdrop.classList.remove('show');
+      document.getElementById('saveSt').onclick=()=>{
+        STATE.showOsmani=document.getElementById('cOsmani').checked;
+        STATE.showTawjih=document.getElementById('cTawjih').checked;
+        STATE.fullscreen=document.getElementById('cFull').checked;
+
+        STATE.fontArabic=+document.getElementById('fArabic').value;
+        STATE.fontBanglaMain=+document.getElementById('fBanglaMain').value;
+        STATE.fontOsmani=+document.getElementById('fOsmani').value;
+        STATE.fontTawjih=+document.getElementById('fTawjih').value;
+        STATE.fontGrammar=+document.getElementById('fGrammar').value;
+        STATE.fontPopupArabic=+document.getElementById('fPopupAr').value;
+
+        S.set('q_showOsmani',STATE.showOsmani);
+        S.set('q_showTawjih',STATE.showTawjih);
+        S.set('q_fontArabic',STATE.fontArabic);
+        S.set('q_fontBanglaMain',STATE.fontBanglaMain);
+        S.set('q_fontOsmani',STATE.fontOsmani);
+        S.set('q_fontTawjih',STATE.fontTawjih);
+        S.set('q_fontGrammar',STATE.fontGrammar);
+        S.set('q_fontPopupArabic',STATE.fontPopupArabic);
+        S.set('q_fullscreen',STATE.fullscreen);
+
+        modalBackdrop.classList.remove('show');
+        applyFullscreenMode();
+        renderAyaList();
+      };
+    });
+
+    // More menu
+    document.getElementById('openMore').addEventListener('click',()=>{
+      modalWindow.innerHTML=
+        '<h3>More</h3>'+
+        '<div style="margin-top:6px;font-size:13px">'+
+          '<p><label><input type="checkbox" id="cMultiMode"> Multi-select mode (tap ayah to select)</label></p>'+
+          '<button id="openPins" class="btn">📌 Pins & Favourites</button>'+
+        '</div>'+
+        '<div style="margin-top:8px;display:flex;justify-content:flex-end"><button id="closeMore" class="btn">Close</button></div>';
+      modalBackdrop.classList.add('show');
+      document.getElementById('cMultiMode').checked=STATE.multiMode;
+      document.getElementById('cMultiMode').onchange=(e)=>{
+        STATE.multiMode=e.target.checked;
+        if(!STATE.multiMode){STATE.selected.clear();renderMultiBar();renderAyaList();}
+      };
+      document.getElementById('openPins').onclick=()=>{openPinsModal();};
+      document.getElementById('closeMore').onclick=()=>modalBackdrop.classList.remove('show');
+    });
+
+    function openPinsModal(){
+      let html='<h3>Pins & Favourites</h3><div style="margin-top:6px">';
+      const combo=[...STATE.pins.map(p=>({kind:'pin',...p})),...STATE.favs.map(f=>({kind:'fav',...f}))];
+      if(combo.length===0) html+='<div style="color:var(--muted);font-size:12px">No pins or favourites.</div>';
+      combo.forEach((it,i)=>{
+        const s=window.suras[it.surahIndex]||{};
+        const label=(it.kind==='pin'?'📌 ':'⭐ ')+(s.nameBn||s.name||'')+' '+(it.surahIndex+1)+':'+(it.ayahIndex+1);
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(148,163,184,0.3)">'+
+          '<div style="font-size:12px"><strong>'+label+'</strong></div>'+
+          '<div style="display:flex;gap:4px">'+
+          '<button data-go="'+i+'" class="btn">Go</button>'+
+          '<button data-copy="'+i+'" class="btn">📋</button>'+
+          '<button data-del="'+i+'" class="btn">🗑</button>'+
+          '</div></div>';
+      });
+      html+='</div><div style="margin-top:6px;display:flex;justify-content:flex-end"><button id="closePinsModal" class="btn">Close</button></div>';
+      modalWindow.innerHTML=html;
+      modalWindow.querySelectorAll('[data-go]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.go;const it=combo[i];
+          modalBackdrop.classList.remove('show');
+          setCurrentSura(it.surahIndex);
+          setTimeout(()=>{
+            const el=document.getElementById('aya-'+it.surahIndex+'-'+it.ayahIndex);
+            if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+          },200);
+        };
+      });
+      modalWindow.querySelectorAll('[data-copy]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.copy;const it=combo[i];
+          navigator.clipboard.writeText(formatAyaForCopy(it.surahIndex,it.ayahIndex,'both')).then(()=>alert('Copied'));
+        };
+      });
+      modalWindow.querySelectorAll('[data-del]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.del;const it=combo[i];
+          if(confirm('Delete?')){
+            if(it.kind==='pin') STATE.pins=STATE.pins.filter(x=>x.key!==it.key);
+            else STATE.favs=STATE.favs.filter(x=>x.key!==it.key);
+            S.set('q_pins',STATE.pins); S.set('q_favs',STATE.favs);
+            openPinsModal();
+          }
+        };
+      });
+      document.getElementById('closePinsModal').onclick=()=>modalBackdrop.classList.remove('show');
+    }
+
+    // word popup
+    function openWordPopup(target,ayah){
+      const meaning = target.dataset.meaning || '';
+      const notes   = target.dataset.notes || ayah.grammar || ayah.notes || '';
+      wpArabic.textContent=target.textContent||'';
+      wpMeaning.textContent=meaning;
+      wpNotes.textContent=notes;
+      wpArabic.style.fontSize=STATE.fontPopupArabic+'px';
+      wpNotes.style.fontSize=STATE.fontGrammar+'px';
+
+      const rect=target.getBoundingClientRect();
+      let top=rect.bottom+window.scrollY+6;
+      let left=rect.left+window.scrollX-20;
+      if(left+320>window.innerWidth) left=window.innerWidth-330;
+      if(left<6) left=6;
+      wordPopup.style.top=top+'px';
+      wordPopup.style.left=left+'px';
+      wordPopup.style.display='block';
+    }
+    wpClose.onclick=()=>{wordPopup.style.display='none';};
+
+    modalBackdrop.addEventListener('click',(e)=>{if(e.target===modalBackdrop) modalBackdrop.classList.remove('show');});
+
+    // view
+    document.querySelectorAll('#viewButtons .chip').forEach(ch=>{
+      if(ch.dataset.view===STATE.view) ch.classList.add('active');
+      ch.addEventListener('click',()=>{
+        document.querySelectorAll('#viewButtons .chip').forEach(x=>x.classList.remove('active'));
+        ch.classList.add('active');
+        STATE.view=ch.dataset.view;
+        S.set('q_view',STATE.view);
+        renderAyaList();
+      });
+    });
+
+    // fullscreen mode
+    function applyFullscreenMode(){
+      if(!STATE.fullscreen){
+        topbar.classList.add('visible');
+        topbar.classList.remove('hidden');
+        document.body.onclick=null;
+      }else{
+        topbar.classList.add('visible');
+        topbar.classList.remove('hidden');
+        document.body.onclick=(e)=>{
+          if(e.target.closest && (e.target.closest('.topbar') || e.target.closest('.drawer') || e.target.closest('.modal') || e.target.closest('.word-popup'))) return;
+          if(topbar.classList.contains('hidden')){
+            topbar.classList.remove('hidden');topbar.classList.add('visible');
+          }else{
+            topbar.classList.remove('visible');topbar.classList.add('hidden');
+          }
+        };
+      }
+    }
+    applyFullscreenMode();
+
+    // initial
+    setCurrentSura(0);
+    window.QAPP={STATE,setCurrentSura};
+  })();
+  </script>
 </body>
 </html>

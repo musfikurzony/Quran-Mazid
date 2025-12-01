@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn" dir="rtl">
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <title>Qur'an • Word-by-Word</title>
@@ -7,2178 +7,678 @@
 
   <style>
     :root {
-      --bg-main: #050816;
-      --bg-panel: #0b1020;
-      --bg-panel-soft: #111827;
-      --bg-chip: #111827;
+      --bg: #050816;
+      --bg-soft: #070b20;
+      --bg-soft-2: #0b1025;
       --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.15);
-      --accent-strong: #4ade80;
-      --accent-gold: #fbbf24;
-      --accent-red: #f97373;
-      --accent-blue: #38bdf8;
+      --accent-soft: rgba(34, 197, 94, 0.08);
       --text-main: #e5e7eb;
-      --text-soft: #9ca3af;
-      --text-strong: #f9fafb;
-      --border-soft: rgba(148, 163, 184, 0.3);
-      --chip-radius: 999px;
-      --card-radius: 14px;
-      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.7);
-      --ayah-radius: 16px;
-      --word-radius: 10px;
-      --transition-fast: 0.18s ease-out;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --chip-bg: rgba(15, 23, 42, 0.9);
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.75);
+      --radius-lg: 18px;
+      --radius-xl: 22px;
+      --radius-pill: 999px;
     }
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
+      background: radial-gradient(circle at top, #0b1120 0, #020617 42%, #020617 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Layout */
-    .app-root {
+    /* ---------- Top App Bar ---------- */
+
+    .app-shell {
+      max-width: 960px;
+      margin: 0 auto;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      padding: 10px 10px 80px;
     }
 
-    .top-shell {
+    .top-bar {
       position: sticky;
       top: 0;
       z-index: 30;
-      background: linear-gradient(to bottom, #020617, rgba(2, 6, 23, 0.9));
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      padding-top: 4px;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7), transparent);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
     }
 
-    .top-bar-main {
+    .top-bar-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 10px 6px;
       gap: 8px;
-    }
-
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .hamburger-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top left, #0b1120, #020617);
-      color: var(--accent-strong);
-      width: 34px;
-      height: 34px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
-      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out,
-        background 0.15s ease-out;
-    }
-
-    .hamburger-btn span {
-      filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.8));
-    }
-
-    .hamburger-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
-      background: radial-gradient(circle at top left, #0f172a, #020617);
-    }
-
-    .hamburger-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.8);
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      min-width: 0;
     }
 
     .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 30% 20%, #4ade80 0, #22c55e 40%, #16a34a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.55);
+      font-size: 15px;
+    }
+
+    .brand-text-main {
       font-size: 15px;
       font-weight: 600;
-      color: var(--text-strong);
+      letter-spacing: 0.02em;
     }
 
     .brand-subtitle {
       font-size: 11px;
-      color: var(--text-soft);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .brand-labels {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
     }
 
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .chip-btn {
-      border-radius: var(--chip-radius);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: radial-gradient(circle at top left, #020617, #020617);
-      color: var(--text-soft);
+    .icon-btn {
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left,
+          rgba(15, 118, 110, 0.45),
+          rgba(15, 23, 42, 0.97));
+      color: var(--text-main);
+      border-radius: 999px;
+      padding: 6px 10px;
       font-size: 11px;
-      padding: 4px 10px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       cursor: pointer;
-      white-space: nowrap;
-      transition: border-color var(--transition-fast),
-        background var(--transition-fast), color var(--transition-fast),
-        box-shadow var(--transition-fast), transform var(--transition-fast);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.9);
     }
 
-    .chip-btn strong {
-      color: var(--accent-strong);
-      font-weight: 500;
+    .icon-btn span.icon {
+      font-size: 13px;
     }
 
-    .chip-btn:hover {
-      border-color: rgba(148, 163, 184, 0.75);
-      background: radial-gradient(circle at top left, #020617, #020617);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
-      transform: translateY(-0.5px);
+    .icon-btn-primary {
+      background: linear-gradient(to right, #22c55e, #4ade80);
+      color: #052e16;
+      border-color: rgba(34, 197, 94, 0.9);
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.7);
     }
 
-    .chip-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 5px 16px rgba(15, 23, 42, 0.9);
+    .icon-btn-primary span.icon {
+      font-size: 14px;
     }
 
-    .settings-btn {
+    .hamburger {
+      border-radius: 999px;
       width: 34px;
       height: 34px;
-      border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at top right, #020617, #020617);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 17px;
-      color: var(--accent-strong);
-      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
-      transition: transform 0.16s ease-out, box-shadow 0.16s ease-out,
-        border-color 0.16s ease-out, background 0.16s ease-out;
+      color: #facc15;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
     }
 
-    .settings-btn:hover {
-      transform: translateY(-1px) rotate(7deg);
-      border-color: var(--accent-strong);
-      background: radial-gradient(circle at top right, #020617, #020617);
-      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.9);
+    .hamburger span {
+      font-size: 20px;
+      line-height: 1;
     }
 
-    .settings-btn:active {
-      transform: translateY(0) rotate(0deg);
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.9);
+    /* ---------- Main layout ---------- */
+
+    .main-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .top-bar-secondary {
+    @media (min-width: 900px) {
+      .main-layout {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+
+    .left-column {
+      flex: 0 0 280px;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .right-column {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (max-width: 899px) {
+      .left-column {
+        order: 2;
+      }
+      .right-column {
+        order: 1;
+      }
+    }
+
+    /* ---------- Cards ---------- */
+
+    .card {
+      background: radial-gradient(circle at top left,
+          rgba(15, 23, 42, 0.97),
+          rgba(15, 23, 42, 0.9));
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 12px 14px;
+    }
+
+    .card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 10px 8px;
-      gap: 8px;
-      border-top: 1px solid rgba(15, 23, 42, 0.9);
-      background: radial-gradient(circle at top, #020617, #020617);
+      margin-bottom: 6px;
     }
 
-    .current-sura-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .current-sura-title-line {
+    .card-title {
       display: flex;
       align-items: center;
       gap: 6px;
-      min-width: 0;
-    }
-
-    .current-sura-name {
       font-size: 13px;
-      font-weight: 500;
-      color: var(--text-strong);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 600;
     }
 
-    .current-sura-meta {
-      font-size: 11px;
-      color: var(--text-soft);
+    .card-title-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--accent-soft);
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 12px;
+      color: #4ade80;
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
     }
 
     .pill {
-      padding: 2px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at top left, #020617, #020617);
+      padding: 2px 8px;
       font-size: 10px;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
     }
 
-    .pill span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent-strong);
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    .pill-strong {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+      background: rgba(22, 163, 74, 0.1);
     }
 
-    .sura-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: nowrap;
-    }
-
-    .sura-dropdown-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      padding: 4px 9px;
-      font-size: 11px;
-      background: radial-gradient(circle at top left, #020617, #020617);
-      color: var(--text-soft);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      transition: all 0.16s ease-out;
-    }
-
-    .sura-dropdown-btn:hover {
-      border-color: rgba(148, 163, 184, 0.8);
-      color: var(--accent-strong);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.9);
-    }
-
-    .continue-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.7);
-      padding: 4px 9px;
-      font-size: 11px;
-      background: radial-gradient(circle at top, #16a34a, #166534);
-      color: #ecfdf5;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.7);
-      transition: all 0.16s ease-out;
-    }
-
-    .continue-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(22, 163, 74, 0.9);
-    }
-
-    .continue-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 7px 18px rgba(22, 163, 74, 0.9);
-    }
-
-    .continue-btn span.icon {
-      font-size: 13px;
-    }
-
-    /* Drawer */
-    .sura-drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.97));
-      backdrop-filter: blur(18px);
-      display: none;
-      z-index: 50;
-    }
-
-    .sura-drawer-backdrop.open {
-      display: block;
-    }
-
-    .sura-drawer {
-      position: fixed;
-      inset: 0 26% 0 0;
-      max-width: 320px;
-      background: linear-gradient(to bottom, #020617, #020617);
-      border-right: 1px solid rgba(148, 163, 184, 0.35);
-      box-shadow: 24px 0 60px rgba(15, 23, 42, 0.9);
-      transform: translateX(-100%);
-      transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
-      z-index: 60;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sura-drawer.open {
-      transform: translateX(0);
-    }
-
-    @media (min-width: 768px) {
-      .sura-drawer {
-        inset: 0 auto 0 0;
-        width: 310px;
-      }
-    }
-
-    .sura-drawer-header {
-      padding: 12px 12px 8px;
-      border-bottom: 1px solid rgba(30, 64, 175, 0.6);
-      background: radial-gradient(circle at top, #020617, #020617);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .sura-drawer-title-row {
+    .card-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      margin-top: 4px;
     }
 
-    .sura-drawer-title {
+    .card-row-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .label-muted {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .label-strong {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tag-soft {
+      font-size: 10px;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.5);
+    }
+
+    .btn-pill {
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill-primary {
+      background: linear-gradient(to right, #22c55e, #4ade80);
+      color: #052e16;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.7);
+    }
+
+    .btn-pill-ghost {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    /* ---------- Surah list bottom sheet ---------- */
+
+    .bottom-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 40;
+    }
+
+    .bottom-sheet-backdrop.visible {
+      display: flex;
+    }
+
+    .bottom-sheet {
+      width: 100%;
+      max-width: 960px;
+      max-height: 82vh;
+      background: radial-gradient(circle at top, #020617, #020617 50%, #020617 100%);
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 -20px 45px rgba(15, 23, 42, 0.95);
+      padding: 10px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .sheet-title {
       font-size: 14px;
       font-weight: 600;
-      color: var(--text-strong);
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .sura-drawer-title span.icon {
-      font-size: 16px;
-      color: var(--accent-strong);
-    }
-
-    .drawer-close-btn {
+    .sheet-title-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 1px 7px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top, #020617, #020617);
-      color: var(--text-soft);
+    }
+
+    .sheet-close-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
       width: 28px;
       height: 28px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
-      transition: all 0.15s ease-out;
     }
 
-    .drawer-close-btn:hover {
-      border-color: rgba(248, 250, 252, 0.7);
-      color: var(--accent-red);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-    }
-
-    .sura-search {
+    .sheet-search-row {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 0 2px 4px;
+      margin-bottom: 4px;
     }
 
-    .sura-search input {
+    .sheet-search {
       flex: 1;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 6px;
       background: rgba(15, 23, 42, 0.9);
-      padding: 6px 10px;
-      font-size: 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 5px 9px;
+    }
+
+    .sheet-search input {
+      border: none;
+      background: transparent;
       color: var(--text-main);
+      font-size: 12px;
+      width: 100%;
       outline: none;
     }
 
-    .sura-search input::placeholder {
-      color: rgba(148, 163, 184, 0.7);
-    }
-
-    .sura-search button {
+    .sheet-search-clear {
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top right, #020617, #020617);
-      color: var(--text-soft);
-      font-size: 10px;
-      padding: 4px 8px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 2px 7px;
       cursor: pointer;
-      white-space: nowrap;
     }
 
-    .sura-list {
+    .sheet-list {
       flex: 1;
       overflow-y: auto;
-      padding: 6px 8px 12px;
+      padding-right: 4px;
+      margin-top: 6px;
+      padding-bottom: 4px;
     }
 
-    .sura-item {
-      border-radius: 999px;
-      background: radial-gradient(circle at top left, #020617, #020617);
-      padding: 6px 9px;
-      margin-bottom: 4px;
-      border: 1px solid rgba(30, 64, 175, 0.6);
+    .surah-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      padding: 7px 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(30, 64, 175, 0.2);
+      background: radial-gradient(circle at top left,
+          rgba(15, 23, 42, 0.96),
+          rgba(15, 23, 42, 0.92));
+      margin-bottom: 4px;
       cursor: pointer;
-      transition: all 0.16s ease-out;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.08s ease-out;
+    }
+
+    .surah-item:hover {
+      border-color: rgba(34, 197, 94, 0.65);
+      background: radial-gradient(circle at top left,
+          rgba(22, 163, 74, 0.12),
+          rgba(15, 23, 42, 0.96));
+      transform: translateY(-1px);
+    }
+
+    .surah-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .surah-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 11px;
+      color: #e5e7eb;
+      flex-shrink: 0;
     }
 
-    .sura-item:hover {
-      border-color: rgba(59, 130, 246, 0.9);
-      background: radial-gradient(circle at top left, #020617, #020617);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
-      transform: translateY(-0.5px);
-    }
-
-    .sura-item.active {
-      border-color: var(--accent-strong);
-      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), #020617);
-    }
-
-    .sura-item-main {
+    .surah-texts {
       display: flex;
       flex-direction: column;
       gap: 2px;
       min-width: 0;
     }
 
-    .sura-item-title {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-width: 0;
-    }
-
-    .sura-number-pill {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 1px 7px;
-      font-size: 10px;
-      color: var(--accent-strong);
-      background: rgba(15, 23, 42, 0.95);
-    }
-
-    .sura-name-bn {
+    .surah-name-bn {
+      font-size: 12px;
       font-weight: 500;
-      color: var(--text-strong);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .sura-name-ar {
-      font-size: 11px;
-      color: var(--text-soft);
-      font-family: "Scheherazade New", "Amiri", "Noto Naskh Arabic", serif;
-    }
-
-    .sura-item-meta {
+    .surah-meta {
       font-size: 10px;
-      color: var(--text-soft);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      color: var(--text-muted);
     }
 
-    .sura-type-badge {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 1px 6px;
-      font-size: 9px;
-      color: var(--text-soft);
-    }
-
-    .sura-ayat-count {
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 10px 10px 24px;
-      gap: 10px;
-    }
-
-    @media (min-width: 1024px) {
-      .main-layout {
-        display: grid;
-        grid-template-columns: 320px minmax(0, 1fr);
-        gap: 10px;
-        padding: 10px 10px 20px;
-      }
-
-      .main-content {
-        padding: 0;
-      }
-
-      .sura-drawer-backdrop {
-        display: none !important;
-      }
-
-      .sura-drawer {
-        position: static;
-        transform: none !important;
-        inset: auto;
-        height: calc(100vh - 84px);
-      }
-    }
-
-    .reader-shell {
-      background: radial-gradient(circle at top, #020617, #020617);
-      border-radius: 18px;
-      padding: 10px 8px 14px;
-      border: 1px solid rgba(30, 64, 175, 0.7);
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 60vh;
-    }
-
-    .bismillah-block {
-      padding: 8px 10px 6px;
-      border-radius: 16px;
-      border: 1px dashed rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.98));
-      text-align: center;
-      margin-bottom: 4px;
-    }
-
-    .bismillah-ar {
-      font-family: "Scheherazade New", "Amiri", "Noto Naskh Arabic", serif;
-      font-size: 20px;
-      line-height: 1.6;
-      color: var(--accent-strong);
-      text-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
-      margin-bottom: 4px;
-    }
-
-    .bismillah-bn {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-bottom: 3px;
-    }
-
-    .bismillah-trans {
-      font-size: 11px;
-      color: var(--text-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .ayah-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .ayah-card {
-      border-radius: var(--ayah-radius);
-      background: radial-gradient(circle at top, #020617, #020617);
-      border: 1px solid rgba(37, 99, 235, 0.6);
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
-      padding: 6px 9px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      position: relative;
-      overflow: hidden;
-      scroll-margin-top: 120px;
-    }
-
-    .ayah-card.highlighted {
-      border-color: var(--accent-strong);
-      box-shadow: 0 16px 32px rgba(22, 163, 74, 0.9);
-    }
-
-    .ayah-header-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .ayah-ref-badge {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 2px 8px;
-      font-size: 10px;
-      color: var(--accent-strong);
-      background: rgba(15, 23, 42, 0.96);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .ayah-ref-badge span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent-strong);
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
-    }
-
-    .ayah-menu {
-      border-radius: 999px;
-      padding: 2px 4px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top, #020617, #020617);
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      cursor: pointer;
-      font-size: 11px;
-      color: var(--text-soft);
-      transition: all 0.15s ease-out;
-    }
-
-    .ayah-menu span.icon {
+    .surah-ar {
       font-size: 14px;
-    }
-
-    .ayah-menu:hover {
-      border-color: rgba(148, 163, 184, 0.9);
-      color: var(--accent-strong);
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
-    }
-
-    .ayah-body {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .ayah-arabic {
-      font-family: "Scheherazade New", "Amiri", "Noto Naskh Arabic", serif;
-      font-size: 22px;
-      line-height: 1.9;
+      font-weight: 500;
+      font-family: "Scheherazade New", "Amiri", system-ui;
       text-align: right;
-      color: var(--text-strong);
-      word-spacing: 0.22em;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px 6px;
-    }
-
-    .word-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1px 7px 2px;
-      border-radius: var(--word-radius);
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      cursor: pointer;
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
-        border-color 0.12s ease-out, background 0.12s ease-out;
-      position: relative;
-      min-height: 28px;
-    }
-
-    .word-chip:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.9);
-      border-color: var(--accent-strong);
-      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.14), #020617);
-    }
-
-    .word-chip.active {
-      border-color: var(--accent-strong);
-      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.16), #020617);
-      box-shadow: 0 12px 24px rgba(22, 163, 74, 0.85);
-    }
-
-    .ayah-bangla-main {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text-main);
-      margin-top: 3px;
-    }
-
-    .ayah-translations {
-      font-size: 11px;
-      line-height: 1.5;
-      color: var(--text-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .ayah-trans-item {
-      display: flex;
-      gap: 4px;
-    }
-
-    .ayah-trans-label {
-      font-weight: 600;
-      color: var(--accent-gold);
-      min-width: 74px;
-      font-size: 11px;
-    }
-
-    .ayah-trans-text {
-      flex: 1;
-    }
-
-    .ayah-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .ayah-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .tag {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 1px 6px;
-      font-size: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(15, 23, 42, 0.96);
-    }
-
-    .tag span.icon {
-      font-size: 11px;
-    }
-
-    .last-read-mini {
-      font-style: italic;
-      font-size: 10px;
-    }
-
-    /* Word bottom sheet */
-    .word-sheet {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transform: translateY(100%);
-      transition: transform 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
-      background: radial-gradient(circle at top, #020617, #020617);
-      border-radius: 16px 16px 0 0;
-      border-top: 1px solid rgba(34, 197, 94, 0.6);
-      box-shadow: 0 -16px 36px rgba(15, 23, 42, 0.95);
-      padding: 8px 10px 12px;
-      z-index: 70;
-    }
-
-    .word-sheet.open {
-      transform: translateY(0);
-    }
-
-    .word-sheet-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .word-sheet-title {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .word-sheet-ar {
-      font-family: "Scheherazade New", "Amiri", "Noto Naskh Arabic", serif;
-      font-size: 20px;
-      color: var(--accent-strong);
-      text-shadow: 0 0 12px rgba(34, 197, 94, 0.95);
-    }
-
-    .word-sheet-bn {
-      font-size: 12px;
-      color: var(--text-main);
-    }
-
-    .word-sheet-close {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: radial-gradient(circle at top, #020617, #020617);
-      color: var(--text-soft);
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.16s ease-out;
-    }
-
-    .word-sheet-close:hover {
-      border-color: rgba(248, 250, 252, 0.85);
-      color: var(--accent-red);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-      transform: translateY(-0.5px);
-    }
-
-    .word-sheet-body {
-      font-size: 12px;
-      color: var(--text-soft);
-      max-height: 32vh;
-      overflow-y: auto;
-      padding-right: 2px;
-    }
-
-    .word-sheet-notes {
-      margin-top: 6px;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    /* Ayah menu popover */
-    .ayah-menu-popover {
-      position: absolute;
-      right: 8px;
-      top: 26px;
-      z-index: 40;
-      background: radial-gradient(circle at top, #020617, #020617);
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.95);
-      padding: 4px 0;
-      min-width: 180px;
-      display: none;
-    }
-
-    .ayah-menu-popover.open {
-      display: block;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      font-size: 11px;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: background 0.12s ease-out;
-    }
-
-    .menu-item:hover {
-      background: rgba(15, 23, 42, 0.96);
-    }
-
-    .menu-item span.icon {
-      font-size: 13px;
-      width: 18px;
-      text-align: center;
-    }
-
-    .menu-item small {
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    /* Settings modal */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
-      backdrop-filter: blur(16px);
-      display: none;
-      z-index: 80;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 480px;
-      max-height: 90vh;
-      background: radial-gradient(circle at top, #020617, #020617);
-      border-radius: 18px;
-      border: 1px solid rgba(30, 64, 175, 0.9);
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.97);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .modal-header {
-      padding: 10px 12px 8px;
-      border-bottom: 1px solid rgba(30, 64, 175, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .modal-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-strong);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .modal-title span.icon {
-      font-size: 16px;
-      color: var(--accent-strong);
-    }
-
-    .modal-close-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: radial-gradient(circle at top, #020617, #020617);
-      color: var(--text-soft);
-      width: 28px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.14s ease-out;
-    }
-
-    .modal-close-btn:hover {
-      border-color: rgba(248, 250, 252, 0.9);
-      color: var(--accent-red);
-      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
-    }
-
-    .modal-body {
-      padding: 8px 10px 10px;
-      overflow-y: auto;
-      font-size: 12px;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .settings-section {
-      border-radius: 14px;
-      border: 1px solid rgba(30, 64, 175, 0.7);
-      background: radial-gradient(circle at top, #020617, #020617);
-      padding: 8px 9px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .settings-section-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent-strong);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .settings-section-title span.icon {
-      font-size: 14px;
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 11px;
-      color: var(--text-main);
-    }
-
-    .toggle-row small {
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .switch {
-      position: relative;
-      width: 38px;
-      height: 20px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      cursor: pointer;
       flex-shrink: 0;
     }
 
-    .switch-thumb {
-      position: absolute;
-      top: 1px;
-      left: 1px;
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      background: var(--text-soft);
-      transition: transform 0.16s ease-out, background 0.16s ease-out;
+    /* ---------- Utility ---------- */
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .switch.on {
-      background: radial-gradient(circle at top, #16a34a, #166534);
-      border-color: rgba(34, 197, 94, 0.9);
-    }
-
-    .switch.on .switch-thumb {
-      transform: translateX(16px);
-      background: #ecfdf5;
-    }
-
-    .slider-row {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      font-size: 11px;
-    }
-
-    .slider-row label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .slider-row small {
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .slider-control {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .slider-control input[type="range"] {
-      flex: 1;
-      accent-color: var(--accent-strong);
-    }
-
-    .slider-number {
-      width: 40px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.95);
-      font-size: 11px;
-      padding: 2px 6px;
-      color: var(--text-main);
-      text-align: center;
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 14px;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 11px;
-      background: radial-gradient(circle at top, #16a34a, #15803d);
-      color: #ecfdf5;
-      box-shadow: 0 16px 34px rgba(22, 163, 74, 0.9);
-      display: none;
-      z-index: 90;
-    }
-
-    .toast.show {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    @media (max-width: 640px) {
-      .top-bar-main {
-        padding: 8px 8px 4px;
-      }
-
-      .top-bar-secondary {
-        padding: 4px 8px 6px;
-      }
-
-      .hamburger-btn {
-        width: 30px;
-        height: 30px;
-      }
-
-      .settings-btn {
-        width: 30px;
-        height: 30px;
-      }
-
-      .reader-shell {
-        padding: 8px 6px 12px;
-      }
+    button {
+      font-family: inherit;
     }
   </style>
 </head>
 <body>
-  <div class="app-root" id="appRoot">
-    <header class="top-shell" id="topShell">
-      <div class="top-bar-main">
-        <div class="brand-section">
-          <button class="hamburger-btn" id="drawerToggleBtn" aria-label="সুরা তালিকা">
-            <span>&equiv;</span>
-          </button>
-          <div class="brand-text">
-            <div class="brand-title">Qur'an • Word-by-Word</div>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-inner">
+        <div class="brand-title">
+          <div class="brand-icon">ﺍ</div>
+          <div class="brand-labels">
+            <div class="brand-text-main">Qur'an • Word-by-Word</div>
             <div class="brand-subtitle">আরবি • শব্দ ধরে ধরে • বাংলা ব্যাখ্যা</div>
           </div>
         </div>
+
         <div class="top-actions">
-          <button class="chip-btn" id="lastReadSummaryBtn" title="শেষ পড়া আয়াতে যান">
-            <span>শেষ পড়া:</span>
-            <strong id="lastReadSummaryText">নির্বাচিত নেই</strong>
+          <button id="settingsBtn" class="icon-btn">
+            <span class="icon">⚙️</span>
+            <span>সেটিংস</span>
           </button>
-          <button class="settings-btn" id="settingsBtn" aria-label="সেটিংস">
-            <span>⚙️</span>
-          </button>
-        </div>
-      </div>
-      <div class="top-bar-secondary">
-        <div class="current-sura-info">
-          <div class="current-sura-title-line">
-            <span class="current-sura-name" id="currentSuraTitle">
-              সূরা নির্বাচন করুন
-            </span>
-          </div>
-          <div class="current-sura-meta">
-            <span class="pill">
-              <span class="dot"></span>
-              <span id="currentSuraMeta">১১৪টি সূরা • সম্পূর্ণ কুরআন</span>
-            </span>
-          </div>
-        </div>
-        <div class="sura-controls">
-          <button class="sura-dropdown-btn" id="openSuraListBtn">
+          <button id="openSurahListBtn" class="icon-btn icon-btn-primary">
+            <span class="icon">📖</span>
             <span>সূরা তালিকা</span>
-            <span>▾</span>
           </button>
-          <button class="continue-btn" id="continueLastBtn">
-            <span class="icon">⏱</span>
-            <span>Continue</span>
+          <button class="hamburger" id="drawerToggleBtn" title="Menu">
+            <span>≡</span>
           </button>
         </div>
       </div>
     </header>
 
-    <div class="main-layout">
-      <aside class="sura-drawer" id="suraDrawer">
-        <div class="sura-drawer-header">
-          <div class="sura-drawer-title-row">
-            <div class="sura-drawer-title">
-              <span class="icon">📖</span>
-              <span>সূরা তালিকা</span>
+    <!-- Main Layout -->
+    <main class="main-layout">
+      <!-- Left Column: Last read + stats -->
+      <section class="left-column">
+        <!-- Last read card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">⏱</div>
+              <div>শেষ পড়া</div>
             </div>
-            <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="বন্ধ করুন">
-              ✕
+            <span class="pill">অটো সেভ</span>
+          </div>
+          <div class="card-subtitle">
+            সর্বশেষ যে সূরা থেকে পড়েছেন, সেখান থেকেই আবার চালু করুন।
+          </div>
+
+          <div class="card-row">
+            <div class="card-row-main">
+              <div class="label-muted">বর্তমান নির্বাচন</div>
+              <div class="label-strong" id="lastReadLabel">নির্বাচিত নেই</div>
+              <div class="tag-soft" id="lastReadTag">আয়াত ১ থেকে শুরু হবে</div>
+            </div>
+            <button id="continueBtn" class="btn-pill btn-pill-primary">
+              <span>⏱ Continue</span>
             </button>
           </div>
-          <div class="sura-search">
-            <input
-              type="text"
-              id="suraSearchInput"
-              placeholder="নাম/নং দিয়ে সার্চ করুন..."
-            />
-            <button id="suraSearchClearBtn">Clear</button>
-          </div>
-        </div>
-        <div class="sura-list" id="suraList"></div>
-      </aside>
+        </article>
 
-      <main class="main-content">
-        <section class="reader-shell">
-          <div id="bismillahContainer"></div>
-          <div class="ayah-list" id="ayahList"></div>
-        </section>
-      </main>
-    </div>
-
-    <div class="sura-drawer-backdrop" id="drawerBackdrop"></div>
-
-    <div class="word-sheet" id="wordSheet">
-      <div class="word-sheet-header">
-        <div class="word-sheet-title">
-          <div class="word-sheet-ar" id="wordSheetAr"></div>
-          <div class="word-sheet-bn" id="wordSheetBn"></div>
-        </div>
-        <button class="word-sheet-close" id="wordSheetCloseBtn" aria-label="বন্ধ করুন">
-          ✕
-        </button>
-      </div>
-      <div class="word-sheet-body">
-        <div class="word-sheet-notes" id="wordSheetNotes"></div>
-      </div>
-    </div>
-
-    <div class="modal-backdrop" id="settingsModal">
-      <div class="modal">
-        <div class="modal-header">
-          <div class="modal-title">
-            <span class="icon">⚙️</span>
-            <span>সেটিংস</span>
-          </div>
-          <button class="modal-close-btn" id="settingsCloseBtn">✕</button>
-        </div>
-        <div class="modal-body">
-          <div class="settings-section">
-            <div class="settings-section-title">
-              <span class="icon">📚</span>
-              <span>অনুবাদ (লেখক নির্বাচন)</span>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div>তাফসীরে ওসমানী দেখাও</div>
-                <small>শুধু আয়াত অনুবাদ নয়, আলাদা কলামে</small>
-              </div>
-              <div class="switch" data-key="showOsmani" id="switchShowOsmani">
-                <div class="switch-thumb"></div>
-              </div>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div>তাওযীহুল কুরআন দেখাও</div>
-                <small>দ্বিতীয় অনুবাদ</small>
-              </div>
-              <div class="switch" data-key="showTawjih" id="switchShowTawjih">
-                <div class="switch-thumb"></div>
-              </div>
+        <!-- Basic info / stats card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">ℹ️</div>
+              <div>কুরআন তথ্য</div>
             </div>
           </div>
+          <div class="card-subtitle">
+            ১১৪টি সূরা • ৩০ পারা • আরবি মূল text-এর সঙ্গে বাংলা অনুবাদ ও শব্দ অনুযায়ী ব্যাখ্যা।
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+            <span class="pill pill-strong">১১৪ সূরা</span>
+            <span class="pill">মাক্কী + মাদানী</span>
+            <span class="pill">শব্দ ধরে ধরে অর্থ</span>
+          </div>
+        </article>
+      </section>
 
-          <div class="settings-section">
-            <div class="settings-section-title">
-              <span class="icon">🧾</span>
-              <span>রিডিং মোড</span>
+      <!-- Right Column: Main actions -->
+      <section class="right-column">
+        <!-- Big action card: select surah -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📖</div>
+              <div>সূরা নির্বাচন করুন</div>
             </div>
-            <div class="toggle-row">
-              <div>
-                <div>ফুল-স্ক্রিন রিডিং (টপবার হাইড)</div>
-                <small>স্ক্রিন ছুঁইলে সাময়িক টপবার দেখাবে</small>
-              </div>
-              <div class="switch" data-key="fullScreenReading" id="switchFullScreen">
-                <div class="switch-thumb"></div>
-              </div>
-            </div>
+            <span class="sheet-title-badge">১১৪টি সূরা • সম্পূর্ণ কুরআন</span>
+          </div>
+          <div class="card-subtitle">
+            যে সূরা থেকে পড়া শুরু করতে চান, নিচের বাটন থেকে নির্বাচন করুন।
           </div>
 
-          <div class="settings-section">
-            <div class="settings-section-title">
-              <span class="icon">🔤</span>
-              <span>ফন্ট সাইজ</span>
-            </div>
-
-            <div class="slider-row">
-              <label for="sliderArabicSize">
-                <span>আরবি আয়াত</span>
-                <span><small>px</small></span>
-              </label>
-              <div class="slider-control">
-                <input
-                  type="range"
-                  id="sliderArabicSize"
-                  min="18"
-                  max="32"
-                  step="1"
-                />
-                <input
-                  type="number"
-                  id="inputArabicSize"
-                  class="slider-number"
-                  min="18"
-                  max="32"
-                />
+          <div class="card-row" style="margin-top:10px;">
+            <div class="card-row-main">
+              <div class="label-muted">বিস্তারিত সূরা তালিকা</div>
+              <div class="label-strong" id="continueTitle">সূরা তালিকা খুলুন</div>
+              <div class="tag-soft" id="continueSub">
+                নাম, নম্বর বা আরবি নাম দিয়ে খুঁজে নিতে পারবেন
               </div>
             </div>
 
-            <div class="slider-row">
-              <label for="sliderMainBnSize">
-                <span>মুল বাংলা অনুবাদ</span>
-                <span><small>px</small></span>
-              </label>
-              <div class="slider-control">
-                <input
-                  type="range"
-                  id="sliderMainBnSize"
-                  min="12"
-                  max="20"
-                  step="1"
-                />
-                <input
-                  type="number"
-                  id="inputMainBnSize"
-                  class="slider-number"
-                  min="12"
-                  max="20"
-                />
-              </div>
-            </div>
-
-            <div class="slider-row">
-              <label for="sliderTranslSize">
-                <span>তাফসীরে ওসমানী / তাওযীহুল কুরআন</span>
-                <span><small>px</small></span>
-              </label>
-              <div class="slider-control">
-                <input
-                  type="range"
-                  id="sliderTranslSize"
-                  min="11"
-                  max="18"
-                  step="1"
-                />
-                <input
-                  type="number"
-                  id="inputTranslSize"
-                  class="slider-number"
-                  min="11"
-                  max="18"
-                />
-              </div>
-            </div>
-
-            <div class="slider-row">
-              <label for="sliderWordMeaningSize">
-                <span>শব্দ অর্থ (word-by-word)</span>
-                <span><small>px</small></span>
-              </label>
-              <div class="slider-control">
-                <input
-                  type="range"
-                  id="sliderWordMeaningSize"
-                  min="11"
-                  max="18"
-                  step="1"
-                />
-                <input
-                  type="number"
-                  id="inputWordMeaningSize"
-                  class="slider-number"
-                  min="11"
-                  max="18"
-                />
-              </div>
-            </div>
-
-            <div class="slider-row">
-              <label for="sliderNotesSize">
-                <span>গ্রামার নোট</span>
-                <span><small>px</small></span>
-              </label>
-              <div class="slider-control">
-                <input
-                  type="range"
-                  id="sliderNotesSize"
-                  min="11"
-                  max="18"
-                  step="1"
-                />
-                <input
-                  type="number"
-                  id="inputNotesSize"
-                  class="slider-number"
-                  min="11"
-                  max="18"
-                />
-              </div>
-            </div>
+            <button id="openSurahListBtn2" class="btn-pill btn-pill-ghost">
+              <span>📖 সূরা তালিকা</span>
+            </button>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="toast" id="toast"></div>
+        </article>
+      </section>
+    </main>
   </div>
 
-  <!-- প্রথমে suras.js -->
+  <!-- Surah List Bottom Sheet -->
+  <div class="bottom-sheet-backdrop" id="surahSheet">
+    <div class="bottom-sheet">
+      <div class="sheet-header">
+        <div class="sheet-title">
+          <span>📖 সূরা তালিকা</span>
+          <span class="sheet-title-badge">১১৪টি সূরা</span>
+        </div>
+        <button class="sheet-close-btn" id="closeSurahSheetBtn">✕</button>
+      </div>
+
+      <div class="sheet-search-row">
+        <div class="sheet-search">
+          <span style="font-size:13px;">🔍</span>
+          <input
+            id="surahSearchInput"
+            type="text"
+            placeholder="নাম/নং দিয়ে সার্চ করুন..."
+          />
+        </div>
+        <button class="sheet-search-clear" id="surahSearchClearBtn">
+          Clear
+        </button>
+      </div>
+
+      <div class="sheet-list" id="surahListContainer">
+        <!-- JS দিয়ে সূরা লিস্ট আসবে -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (⚠️ order: suras.js first, then app.js) -->
   <script src="suras.js"></script>
-
-  <!-- মেইন অ্যাপ স্ক্রিপ্ট -->
-  <script>
-    const settingsKey = "qwb_settings_v1";
-    const lastReadKey = "qwb_last_read_v1";
-
-    const defaultSettings = {
-      showOsmani: true,
-      showTawjih: true,
-      fullScreenReading: false,
-      arabicFontSize: 22,
-      mainBnFontSize: 13,
-      translFontSize: 11,
-      wordMeaningFontSize: 12,
-      notesFontSize: 12,
-    };
-
-    let settings = { ...defaultSettings };
-    let currentSura = null;
-    let currentSuraData = null;
-    let lastRead = null;
-    let fullScreenOnTapVisible = true;
-
-    const el = (id) => document.getElementById(id);
-
-    function showToast(msg) {
-      const t = el("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 1700);
-    }
-
-    function loadSettings() {
-      try {
-        const saved = localStorage.getItem(settingsKey);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          settings = { ...defaultSettings, ...parsed };
-        }
-      } catch (e) {
-        console.warn("settings load error", e);
-      }
-    }
-
-    function saveSettings() {
-      localStorage.setItem(settingsKey, JSON.stringify(settings));
-    }
-
-    function loadLastRead() {
-      try {
-        const saved = localStorage.getItem(lastReadKey);
-        if (saved) {
-          lastRead = JSON.parse(saved);
-        }
-      } catch (e) {
-        console.warn("last read load error", e);
-      }
-    }
-
-    function saveLastRead() {
-      if (lastRead) {
-        localStorage.setItem(lastReadKey, JSON.stringify(lastRead));
-      }
-    }
-
-    function applySettingsToUI() {
-      const arabicSize = settings.arabicFontSize;
-      const mainBnSize = settings.mainBnFontSize;
-      const translSize = settings.translFontSize;
-      const wordMeaningSize = settings.wordMeaningFontSize;
-      const notesSize = settings.notesFontSize;
-
-      el("sliderArabicSize").value = arabicSize;
-      el("inputArabicSize").value = arabicSize;
-      el("sliderMainBnSize").value = mainBnSize;
-      el("inputMainBnSize").value = mainBnSize;
-      el("sliderTranslSize").value = translSize;
-      el("inputTranslSize").value = translSize;
-      el("sliderWordMeaningSize").value = wordMeaningSize;
-      el("inputWordMeaningSize").value = wordMeaningSize;
-      el("sliderNotesSize").value = notesSize;
-      el("inputNotesSize").value = notesSize;
-
-      const ws = el("switchShowOsmani");
-      const wt = el("switchShowTawjih");
-      const wf = el("switchFullScreen");
-      ws.classList.toggle("on", settings.showOsmani);
-      wt.classList.toggle("on", settings.showTawjih);
-      wf.classList.toggle("on", settings.fullScreenReading);
-
-      document
-        .querySelectorAll(".ayah-arabic")
-        .forEach((d) => (d.style.fontSize = arabicSize + "px"));
-      document
-        .querySelectorAll(".ayah-bangla-main")
-        .forEach((d) => (d.style.fontSize = mainBnSize + "px"));
-      document
-        .querySelectorAll(".ayah-trans-text")
-        .forEach((d) => (d.style.fontSize = translSize + "px"));
-
-      document
-        .querySelectorAll(".word-sheet-bn")
-        .forEach((d) => (d.style.fontSize = wordMeaningSize + "px"));
-      document
-        .querySelectorAll(".word-sheet-notes")
-        .forEach((d) => (d.style.fontSize = notesSize + "px"));
-
-      if (settings.fullScreenReading) {
-        el("topShell").style.opacity = "0";
-        el("topShell").style.pointerEvents = "none";
-        fullScreenOnTapVisible = false;
-      } else {
-        el("topShell").style.opacity = "1";
-        el("topShell").style.pointerEvents = "auto";
-        fullScreenOnTapVisible = true;
-      }
-    }
-
-    function attachSliderPair(sliderId, inputId, key, min, max) {
-      const slider = el(sliderId);
-      const input = el(inputId);
-
-      function clamp(v) {
-        const n = Number(v);
-        if (isNaN(n)) return settings[key];
-        return Math.min(max, Math.max(min, n));
-      }
-
-      slider.addEventListener("input", () => {
-        const v = clamp(slider.value);
-        settings[key] = v;
-        input.value = v;
-        saveSettings();
-        applySettingsToUI();
-      });
-
-      input.addEventListener("change", () => {
-        const v = clamp(input.value);
-        settings[key] = v;
-        slider.value = v;
-        saveSettings();
-        applySettingsToUI();
-      });
-    }
-
-    function updateLastReadSummary() {
-      const elText = el("lastReadSummaryText");
-      if (!lastRead || !lastRead.suraNumber || !lastRead.ayahNumber) {
-        elText.textContent = "নির্বাচিত নেই";
-        return;
-      }
-      elText.textContent = \`\${lastRead.suraNumber}:\${lastRead.ayahNumber}\`;
-    }
-
-    function renderSuraList() {
-      const listEl = el("suraList");
-      listEl.innerHTML = "";
-      const items =
-        window.suras && Array.isArray(window.suras) ? window.suras : [];
-
-      items.forEach((sura) => {
-        const div = document.createElement("div");
-        div.className = "sura-item";
-        div.dataset.suraNumber = sura.number;
-
-        const main = document.createElement("div");
-        main.className = "sura-item-main";
-
-        const titleRow = document.createElement("div");
-        titleRow.className = "sura-item-title";
-
-        const num = document.createElement("span");
-        num.className = "sura-number-pill";
-        num.textContent = sura.number;
-
-        const nameBn = document.createElement("span");
-        nameBn.className = "sura-name-bn";
-        nameBn.textContent = sura.nameBn;
-
-        const nameAr = document.createElement("span");
-        nameAr.className = "sura-name-ar";
-        nameAr.textContent = sura.nameAr;
-
-        titleRow.appendChild(num);
-        titleRow.appendChild(nameBn);
-        main.appendChild(titleRow);
-        main.appendChild(nameAr);
-
-        const meta = document.createElement("div");
-        meta.className = "sura-item-meta";
-
-        const typeBadge = document.createElement("span");
-        typeBadge.className = "sura-type-badge";
-        typeBadge.textContent = sura.type === "Makki" ? "মাক্কী" : "মাদানী";
-
-        const ayat = document.createElement("span");
-        ayat.className = "sura-ayat-count";
-        ayat.textContent = \`\${sura.ayahCount} আয়াত\`;
-
-        meta.appendChild(typeBadge);
-        meta.appendChild(ayat);
-
-        const rightSide = document.createElement("div");
-        rightSide.style.display = "flex";
-        rightSide.style.flexDirection = "column";
-        rightSide.style.alignItems = "flex-end";
-        rightSide.style.gap = "2px";
-
-        rightSide.appendChild(meta);
-
-        div.appendChild(main);
-        div.appendChild(rightSide);
-
-        div.addEventListener("click", () => {
-          loadSura(sura.number);
-          closeDrawer();
-        });
-
-        listEl.appendChild(div);
-      });
-    }
-
-    async function loadSura(number) {
-      const info =
-        (window.suras || []).find((s) => s.number === Number(number)) || null;
-      currentSura = info;
-      currentSuraData = null;
-
-      const titleEl = el("currentSuraTitle");
-      const metaEl = el("currentSuraMeta");
-      if (info) {
-        titleEl.textContent = \`\${info.number}. \${info.nameBn} (\${info.nameAr})\`;
-        metaEl.textContent = \`\${info.type === "Makki" ? "মাক্কী" : "মাদানী"} • \${info.ayahCount} আয়াত\`;
-      } else {
-        titleEl.textContent = "সূরা নির্বাচন করুন";
-        metaEl.textContent = "১১৪টি সূরা • সম্পূর্ণ কুরআন";
-      }
-
-      el("bismillahContainer").innerHTML = "";
-      el("ayahList").innerHTML = "";
-
-      if (!info || !info.file) return;
-
-      try {
-        const res = await fetch(info.file);
-        if (!res.ok) throw new Error("নেই");
-        const data = await res.json();
-        currentSuraData = data;
-        renderSura(data);
-      } catch (e) {
-        console.error("sura load error", e);
-        showToast("সুরা ডেটা লোড করা গেল না");
-      }
-    }
-
-    function renderSura(data) {
-      const bisEl = el("bismillahContainer");
-      const listEl = el("ayahList");
-      bisEl.innerHTML = "";
-      listEl.innerHTML = "";
-
-      if (data.bismillah && data.hasBismillah) {
-        const b = data.bismillah;
-        const block = document.createElement("div");
-        block.className = "bismillah-block";
-
-        const ar = document.createElement("div");
-        ar.className = "bismillah-ar";
-        ar.textContent = b.arabic || "";
-
-        const bn = document.createElement("div");
-        bn.className = "bismillah-bn";
-        bn.textContent = b.bangla || "";
-
-        block.appendChild(ar);
-        block.appendChild(bn);
-
-        if (b.translations) {
-          const tWrap = document.createElement("div");
-          tWrap.className = "bismillah-trans";
-          if (b.translations.osmani) {
-            const line = document.createElement("div");
-            line.textContent = "ওসমানী: " + b.translations.osmani;
-            tWrap.appendChild(line);
-          }
-          if (b.translations.tawjih) {
-            const line = document.createElement("div");
-            line.textContent = "তাওযীহুল: " + b.translations.tawjih;
-            tWrap.appendChild(line);
-          }
-          block.appendChild(tWrap);
-        }
-
-        bisEl.appendChild(block);
-      }
-
-      (data.ayahs || []).forEach((ayah) => {
-        const card = document.createElement("div");
-        card.className = "ayah-card";
-        card.dataset.ayahNumber = ayah.ayahNumber;
-
-        const header = document.createElement("div");
-        header.className = "ayah-header-line";
-
-        const ref = document.createElement("span");
-        ref.className = "ayah-ref-badge";
-        const dot = document.createElement("span");
-        dot.className = "dot";
-        const txt = document.createElement("span");
-        txt.textContent = \`\${data.number || currentSura?.number || ""}:\${ayah.ayahNumber}\`;
-        ref.appendChild(dot);
-        ref.appendChild(txt);
-
-        const menuBtn = document.createElement("button");
-        menuBtn.className = "ayah-menu";
-        menuBtn.type = "button";
-        menuBtn.innerHTML = '<span class="icon">⋯</span><span>অপশন</span>';
-
-        const menuPop = document.createElement("div");
-        menuPop.className = "ayah-menu-popover";
-
-        const actions = [
-          { key: "copy", icon: "📋", label: "কপি", hint: "Arabic + Bangla" },
-          { key: "share", icon: "🔗", label: "শেয়ার", hint: "System share" },
-          { key: "pin", icon: "📌", label: "Pin (Folder later)", hint: "" },
-          { key: "fav", icon: "⭐", label: "Favourite", hint: "" },
-          { key: "last", icon: "⏱", label: "শেষ পড়া সেট", hint: "" },
-        ];
-
-        actions.forEach((act) => {
-          const mi = document.createElement("div");
-          mi.className = "menu-item";
-          mi.dataset.action = act.key;
-          mi.innerHTML =
-            \`<span class="icon">\${act.icon}</span><span>\${act.label}</span>\` +
-            (act.hint
-              ? \`<small>\${act.hint}</small>\`
-              : "");
-          mi.addEventListener("click", () => {
-            handleAyahMenuAction(act.key, data, ayah);
-            menuPop.classList.remove("open");
-          });
-          menuPop.appendChild(mi);
-        });
-
-        menuBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          document
-            .querySelectorAll(".ayah-menu-popover.open")
-            .forEach((pop) => pop.classList.remove("open"));
-          menuPop.classList.toggle("open");
-        });
-
-        header.appendChild(ref);
-        header.appendChild(menuBtn);
-        card.appendChild(header);
-        card.appendChild(menuPop);
-
-        const body = document.createElement("div");
-        body.className = "ayah-body";
-
-        const ar = document.createElement("div");
-        ar.className = "ayah-arabic";
-        const wordsText = ayah.arabic ? ayah.arabic.trim().split(/\s+/) : [];
-
-        wordsText.forEach((wt) => {
-          const chip = document.createElement("span");
-          chip.className = "word-chip";
-          chip.textContent = wt;
-          chip.addEventListener("click", () => {
-            showWordSheet(ayah, wt);
-            document
-              .querySelectorAll(".word-chip.active")
-              .forEach((c) => c.classList.remove("active"));
-            chip.classList.add("active");
-          });
-          ar.appendChild(chip);
-        });
-
-        const bnMain = document.createElement("div");
-        bnMain.className = "ayah-bangla-main";
-        bnMain.textContent = ayah.bangla || "";
-
-        body.appendChild(ar);
-        body.appendChild(bnMain);
-
-        const translWrap = document.createElement("div");
-        translWrap.className = "ayah-translations";
-
-        if (settings.showOsmani && ayah.translations?.osmani) {
-          const row = document.createElement("div");
-          row.className = "ayah-trans-item";
-          const label = document.createElement("div");
-          label.className = "ayah-trans-label";
-          label.textContent = "ওসমানী";
-          const text = document.createElement("div");
-          text.className = "ayah-trans-text";
-          text.textContent = ayah.translations.osmani;
-          row.appendChild(label);
-          row.appendChild(text);
-          translWrap.appendChild(row);
-        }
-
-        if (settings.showTawjih && ayah.translations?.tawjih) {
-          const row = document.createElement("div");
-          row.className = "ayah-trans-item";
-          const label = document.createElement("div");
-          label.className = "ayah-trans-label";
-          label.textContent = "তাওযীহুল";
-          const text = document.createElement("div");
-          text.className = "ayah-trans-text";
-          text.textContent = ayah.translations.tawjih;
-          row.appendChild(label);
-          row.appendChild(text);
-          translWrap.appendChild(row);
-        }
-
-        body.appendChild(translWrap);
-        card.appendChild(body);
-
-        const footer = document.createElement("div");
-        footer.className = "ayah-footer";
-
-        const tags = document.createElement("div");
-        tags.className = "ayah-tags";
-
-        const tagAy = document.createElement("span");
-        tagAy.className = "tag";
-        tagAy.innerHTML = '<span class="icon">🔖</span><span>Ayah</span>';
-        tags.appendChild(tagAy);
-
-        const tagWord = document.createElement("span");
-        tagWord.className = "tag";
-        tagWord.innerHTML = '<span class="icon">🧩</span><span>Word-by-word</span>';
-        tags.appendChild(tagWord);
-
-        const lastMini = document.createElement("span");
-        lastMini.className = "last-read-mini";
-        lastMini.textContent = "";
-
-        if (
-          lastRead &&
-          lastRead.suraNumber === (data.number || currentSura?.number) &&
-          lastRead.ayahNumber === ayah.ayahNumber
-        ) {
-          lastMini.textContent = "◉ শেষ পড়া";
-        }
-
-        footer.appendChild(tags);
-        footer.appendChild(lastMini);
-
-        card.appendChild(footer);
-
-        listEl.appendChild(card);
-      });
-
-      applySettingsToUI();
-    }
-
-    function showWordSheet(ayah, clickedWord) {
-      const sheet = el("wordSheet");
-      const arEl = el("wordSheetAr");
-      const bnEl = el("wordSheetBn");
-      const notesEl = el("wordSheetNotes");
-
-      arEl.textContent = clickedWord;
-      let matched = null;
-      if (Array.isArray(ayah.words)) {
-        matched = ayah.words.find((w) => (w.text || "").trim() === clickedWord);
-      }
-      if (!matched && Array.isArray(ayah.words)) {
-        matched = ayah.words.find((w) => (w.text || "").includes(clickedWord));
-      }
-
-      bnEl.textContent = matched?.meaningBn || "";
-      notesEl.textContent = matched?.notes || "";
-
-      sheet.classList.add("open");
-      applySettingsToUI();
-    }
-
-    function hideWordSheet() {
-      el("wordSheet").classList.remove("open");
-      document
-        .querySelectorAll(".word-chip.active")
-        .forEach((c) => c.classList.remove("active"));
-    }
-
-    function handleAyahMenuAction(action, suraData, ayah) {
-      const ref = \`\${suraData.number || currentSura?.number || ""}:\${
-        ayah.ayahNumber
-      }\`;
-      const arabicText = ayah.arabic || "";
-      const mainBn = ayah.bangla || "";
-      const osm = ayah.translations?.osmani || "";
-      const taw = ayah.translations?.tawjih || "";
-
-      let text = \`(\${ref})\n\${arabicText}\n\${mainBn}\`;
-      if (settings.showOsmani && osm) text += \`\n[ওসমানী] \${osm}\`;
-      if (settings.showTawjih && taw) text += \`\n[তাওযীহুল] \${taw}\`;
-
-      if (action === "copy") {
-        navigator.clipboard
-          .writeText(text)
-          .then(() => showToast("আয়াত কপি হয়েছে"))
-          .catch(() => showToast("কপি করতে সমস্যা হয়েছে"));
-      } else if (action === "share") {
-        if (navigator.share) {
-          navigator
-            .share({
-              text,
-              title: "Qur'an " + ref,
-            })
-            .catch(() => {});
-        } else {
-          navigator.clipboard
-            .writeText(text)
-            .then(() => showToast("শেয়ার নেই, টেক্সট কপি হয়েছে"))
-            .catch(() => showToast("শেয়ার/কপি তে সমস্যা"));
-        }
-      } else if (action === "pin") {
-        showToast("Pin ফোল্ডার future plan, ইনশাআল্লাহ");
-      } else if (action === "fav") {
-        showToast("Favourite ফোল্ডার future plan, ইনশাআল্লাহ");
-      } else if (action === "last") {
-        lastRead = {
-          suraNumber: suraData.number || currentSura?.number,
-          ayahNumber: ayah.ayahNumber,
-        };
-        saveLastRead();
-        updateLastReadSummary();
-        showToast(\`শেষ পড়া সেট: \${lastRead.suraNumber}:\${lastRead.ayahNumber}\`);
-        if (currentSuraData && currentSuraData.number === lastRead.suraNumber) {
-          renderSura(currentSuraData);
-        }
-      }
-    }
-
-    function openDrawer() {
-      el("suraDrawer").classList.add("open");
-      el("drawerBackdrop").classList.add("open");
-    }
-
-    function closeDrawer() {
-      el("suraDrawer").classList.remove("open");
-      el("drawerBackdrop").classList.remove("open");
-    }
-
-    function openSettingsModal() {
-      el("settingsModal").classList.add("open");
-    }
-
-    function closeSettingsModal() {
-      el("settingsModal").classList.remove("open");
-    }
-
-    function toggleSwitch(key) {
-      settings[key] = !settings[key];
-      saveSettings();
-      applySettingsToUI();
-      if (currentSuraData) {
-        renderSura(currentSuraData);
-      }
-    }
-
-    function handleFullScreenTap() {
-      if (!settings.fullScreenReading) return;
-      const topShell = el("topShell");
-      if (fullScreenOnTapVisible) {
-        topShell.style.opacity = "0";
-        topShell.style.pointerEvents = "none";
-        fullScreenOnTapVisible = false;
-      } else {
-        topShell.style.opacity = "1";
-        topShell.style.pointerEvents = "auto";
-        fullScreenOnTapVisible = true;
-        setTimeout(() => {
-          if (settings.fullScreenReading && fullScreenOnTapVisible) {
-            topShell.style.opacity = "0";
-            topShell.style.pointerEvents = "none";
-            fullScreenOnTapVisible = false;
-          }
-        }, 2000);
-      }
-    }
-
-    function continueLastRead() {
-      if (!lastRead || !lastRead.suraNumber) {
-        showToast("কোনও শেষ পড়া সেভ নেই");
-        return;
-      }
-      loadSura(lastRead.suraNumber).then(() => {
-        setTimeout(() => {
-          const card = document.querySelector(
-            \`.ayah-card[data-ayah-number="\${lastRead.ayahNumber}"]\`
-          );
-          if (card) {
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-            card.classList.add("highlighted");
-            setTimeout(
-              () => card.classList.remove("highlighted"),
-              2000
-            );
-          }
-        }, 400);
-      });
-    }
-
-    function initSearch() {
-      const input = el("suraSearchInput");
-      const clearBtn = el("suraSearchClearBtn");
-
-      function filter() {
-        const q = (input.value || "").trim();
-        const items = el("suraList").querySelectorAll(".sura-item");
-        if (!q) {
-          items.forEach((it) => (it.style.display = ""));
-          return;
-        }
-        const lower = q.toLowerCase();
-        (window.suras || []).forEach((sura, idx) => {
-          const item = items[idx];
-          if (!item) return;
-          const match =
-            String(sura.number).includes(lower) ||
-            (sura.nameBn || "").toLowerCase().includes(lower) ||
-            (sura.nameAr || "").toLowerCase().includes(lower);
-          item.style.display = match ? "" : "none";
-        });
-      }
-
-      input.addEventListener("input", filter);
-      clearBtn.addEventListener("click", () => {
-        input.value = "";
-        filter();
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      loadSettings();
-      loadLastRead();
-
-      renderSuraList();
-      updateLastReadSummary();
-      applySettingsToUI();
-
-      attachSliderPair(
-        "sliderArabicSize",
-        "inputArabicSize",
-        "arabicFontSize",
-        18,
-        32
-      );
-      attachSliderPair(
-        "sliderMainBnSize",
-        "inputMainBnSize",
-        "mainBnFontSize",
-        12,
-        20
-      );
-      attachSliderPair(
-        "sliderTranslSize",
-        "inputTranslSize",
-        "translFontSize",
-        11,
-        18
-      );
-      attachSliderPair(
-        "sliderWordMeaningSize",
-        "inputWordMeaningSize",
-        "wordMeaningFontSize",
-        11,
-        18
-      );
-      attachSliderPair(
-        "sliderNotesSize",
-        "inputNotesSize",
-        "notesFontSize",
-        11,
-        18
-      );
-
-      el("drawerToggleBtn").addEventListener("click", openDrawer);
-      el("openSuraListBtn").addEventListener("click", openDrawer);
-      el("drawerCloseBtn").addEventListener("click", closeDrawer);
-      el("drawerBackdrop").addEventListener("click", closeDrawer);
-
-      el("settingsBtn").addEventListener("click", openSettingsModal);
-      el("settingsCloseBtn").addEventListener("click", closeSettingsModal);
-
-      el("switchShowOsmani").addEventListener("click", () =>
-        toggleSwitch("showOsmani")
-      );
-      el("switchShowTawjih").addEventListener("click", () =>
-        toggleSwitch("showTawjih")
-      );
-      el("switchFullScreen").addEventListener("click", () =>
-        toggleSwitch("fullScreenReading")
-      );
-
-      el("wordSheetCloseBtn").addEventListener("click", hideWordSheet);
-      el("wordSheet").addEventListener("click", (e) => {
-        if (e.target.id === "wordSheet") hideWordSheet();
-      });
-
-      el("continueLastBtn").addEventListener("click", continueLastRead);
-      el("lastReadSummaryBtn").addEventListener("click", continueLastRead);
-
-      el("appRoot").addEventListener("click", (e) => {
-        if (!settings.fullScreenReading) return;
-        if (
-          e.target.closest("#topShell") ||
-          e.target.closest("#settingsModal") ||
-          e.target.closest(".sura-drawer") ||
-          e.target.closest(".word-sheet")
-        ) {
-          return;
-        }
-        handleFullScreenTap();
-      });
-
-      document.body.addEventListener("click", (e) => {
-        if (!e.target.closest(".ayah-menu")) {
-          document
-            .querySelectorAll(".ayah-menu-popover.open")
-            .forEach((pop) => pop.classList.remove("open"));
-        }
-      });
-
-      initSearch();
-
-      const defaultSura = (window.suras || []).find((s) => s.number === 103);
-      if (defaultSura) {
-        loadSura(defaultSura.number);
-      }
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
